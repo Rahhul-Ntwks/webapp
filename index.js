@@ -2,10 +2,12 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const {testConnection} = require('./config/dbconfig');
+const userRoutes  = require('./routes/userRoutes')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/v1',userRoutes);
 app.all('/healthz',async (req,res) => {
   if(req.method != "GET"){
     return res.status(405).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
