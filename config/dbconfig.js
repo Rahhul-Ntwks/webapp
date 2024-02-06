@@ -1,6 +1,10 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config()
-const sequelize = new Sequelize(process.env.DB_FILE)
+const sequelize = new Sequelize(process.env.DB_FILE,{
+  define : {
+    freezeTableName : true
+  }
+})
 
 async function testConnection(){
 try {
