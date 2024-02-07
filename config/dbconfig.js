@@ -1,10 +1,12 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config()
+
 const sequelize = new Sequelize(process.env.DB_FILE,{
   define : {
     freezeTableName : true
   }
 })
+console.log(process.env.DB_FILE)
 
 async function testConnection(){
 try {
@@ -15,4 +17,4 @@ try {
     return false
   }
 }
-  module.exports = {testConnection};
+  module.exports = {testConnection,sequelize};

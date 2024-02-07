@@ -1,13 +1,14 @@
+console.log("Application starting...");
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const {testConnection} = require('./config/dbconfig');
-const userRoutes  = require('./routes/userRoutes')
+const {testConnection,sequelize} = require('./config/dbconfig');
+const userRouter  = require('./routes/userRoutes')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/v1',userRoutes);
+app.use('/v1',userRouter);
 app.all('/healthz',async (req,res) => {
   if(req.method != "GET"){
     return res.status(405).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
@@ -27,7 +28,7 @@ app.all('*',(req,res)=> {
 })
 
 app.listen(3000, () => {
-  
+  console.log(`Server listening on port 3000`)
 });
 
 
