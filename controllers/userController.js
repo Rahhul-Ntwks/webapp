@@ -9,7 +9,12 @@ async function createUser(req,res){
         console.log("Received request to create a new user.");
         console.log(req.body);
         const { first_name, last_name, username, password } = req.body;
-        if(!password || !username){
+        const authorisedfields= ['first_name', 'last_name', 'password','username']
+        const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
+        if(UnallowedFields.length > 0){
+           return res.status(400).json({error : 'wrong input fields, cant update'})
+        }
+        if(!password || !username || !first_name || !last_name){
             return res.status(400).json();
         }
         const existUser = await User.findOne({where : {username}});
@@ -28,7 +33,7 @@ async function createUser(req,res){
         return res.status(201).json(userJson)
 
     } catch(error){
-        res.status(500).json({ error: 'Internal Server Error', details: error });
+        res.status(403).json({ error: 'Internal Server Error', details: error });
 
     }
 }
@@ -57,7 +62,7 @@ async function updateUser(req,res){
         const user = await User.findOne({ where: { username: validatedUser.username } });
         const updatedDataJson = user.toJSON();
         delete updatedDataJson.password
-        return res.status(200).json(updatedDataJson)
+        return res.status(204).json()
 
     }catch(error) {
         res.status(403).json({ error: 'Forbidden' });
@@ -67,16 +72,20 @@ async function updateUser(req,res){
 async function getUser(req,res){
     try{
      const authorizationHeader = req.headers['authorization'];
-        const validatedUser = validateUser(authorizationHeader)
-        if(!validatedUser){
+     if((parseInt(req.headers['content-length']) > 0) || Object.keys(req.body).length>0 || (Object.keys(req.query).length > 0)){
+        return res.status(400).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
+      }
+        const validatedUser = await validateUser(authorizationHeader)
+        if(!(await validatedUser).success){
             res.status(401).json({error : 'user unauthorized'})
         }
-        const userData = await User.findOne({ where: { username: req.body.username } });
-        delete userData.password
-        res.status(200).json({userData})
+        const userData = await User.findOne({ where: { username: validatedUser.username } });
+        const userDataJson = userData.toJSON()
+        delete userDataJson.password
+        res.status(200).json(userDataJson)
     }
     catch(error){
-        res.status(403).json('unable to fetch data')
+        res.status(400).json('unable to fetch data')
     }
 
 }
