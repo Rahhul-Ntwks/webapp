@@ -4,9 +4,11 @@ const app = express()
 const bodyParser = require('body-parser')
 const {testConnection,sequelize} = require('./config/dbconfig');
 const userRouter  = require('./routes/userRoutes')
+const checkJsonHeader = require('./utils/checkJsonHeader')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(checkJsonHeader)
 
 app.use('/v1',userRouter);
 app.all('/healthz',async (req,res) => {

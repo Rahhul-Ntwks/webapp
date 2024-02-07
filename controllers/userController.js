@@ -11,7 +11,8 @@ async function createUser(req,res){
         const { first_name, last_name, username, password } = req.body;
         const authorisedfields= ['first_name', 'last_name', 'password','username']
         const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
-        if(UnallowedFields.length > 0){
+        const allowedFields = Object.keys(req.body).filter(field => authorisedfields.includes(field))
+        if(UnallowedFields.length > 0 ||allowedFields.length != authorisedfields.length){
            return res.status(400).json({error : 'wrong input fields, cant update'})
         }
         if(!password || !username || !first_name || !last_name){
@@ -33,7 +34,7 @@ async function createUser(req,res){
         return res.status(201).json(userJson)
 
     } catch(error){
-        res.status(403).json({ error: 'Internal Server Error', details: error });
+        res.status(400).json({ error: error.message });
 
     }
 }
@@ -65,7 +66,7 @@ async function updateUser(req,res){
         return res.status(204).json()
 
     }catch(error) {
-        res.status(403).json({ error: 'Forbidden' });
+        res.status(400).json({ error: 'Forbidden' });
     }
 
 }
