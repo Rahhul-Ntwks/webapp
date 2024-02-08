@@ -8,6 +8,10 @@ async function createUser(req,res){
     try{
         console.log("Received request to create a new user.");
         console.log(req.body);
+        const acceptHeader = req.get('Accept');
+        if (acceptHeader && !acceptHeader.includes('application/json')) {
+            return res.status(406).send('Only JSON responses are accepted.');
+        }
         const { first_name, last_name, username, password } = req.body;
         const authorisedfields= ['first_name', 'last_name', 'password','username']
         const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
@@ -41,6 +45,10 @@ async function createUser(req,res){
 async function updateUser(req,res){
     try{
         const authorizationHeader = req.headers['authorization'];
+        const acceptHeader = req.get('Accept');
+        if (acceptHeader && !acceptHeader.includes('application/json')) {
+            return res.status(406).send('Only JSON responses are accepted.');
+        }
         const validatedUser = await validateUser(authorizationHeader)
         if(!(await validatedUser).success){
             return res.status(401).json({error : 'user unauthorized'})
@@ -50,16 +58,28 @@ async function updateUser(req,res){
         if(UnallowedFields.length > 0){
            return res.status(400).json({error : 'wrong input fields, cant update'})
         }
-        
+        var updatedData = {...req.body}
+        if(req.body.password){
+        const body = {...req.body};
         const passwordHash = await bcrypt.hash(req.body.password,10)
-        const updatedData = {...req.body}
-        updatedData.password = passwordHash
-
-        const updatedData1 = await User.update({ updatedData,account_updated : Date.now() }, {
+        body.password = passwordHash
+        body.account_updated = Date.now()
+         const updatedData1 = await User.update(body, {
             where: {
               username: validatedUser.username
             }
           });
+        }else {
+             updatedData = {...req.body}
+             updatedData.account_updated=Date.now()
+             const updatedData1 = await User.update(updatedData, {
+                where: {
+                  username: validatedUser.username
+                }
+              });
+        }
+
+        
         const user = await User.findOne({ where: { username: validatedUser.username } });
         const updatedDataJson = user.toJSON();
         delete updatedDataJson.password
@@ -73,6 +93,11 @@ async function updateUser(req,res){
 async function getUser(req,res){
     try{
      const authorizationHeader = req.headers['authorization'];
+
+     const acceptHeader = req.get('Accept');
+        if (acceptHeader && !acceptHeader.includes('application/json')) {
+            return res.status(406).send('Only JSON responses are accepted.');
+        }
      if((parseInt(req.headers['content-length']) > 0) || Object.keys(req.body).length>0 || (Object.keys(req.query).length > 0)){
         return res.status(400).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
       }
@@ -86,7 +111,8 @@ async function getUser(req,res){
         res.status(200).json(userDataJson)
     }
     catch(error){
-        res.status(400).json('unable to fetch data')
+        res.status(400).json()
+
     }
 
 }
