@@ -93,6 +93,7 @@ async function updateUser(req,res){
 async function getUser(req,res){
     try{
      const authorizationHeader = req.headers['authorization'];
+
      const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
             return res.status(406).send('Only JSON responses are accepted.');
@@ -111,6 +112,7 @@ async function getUser(req,res){
     }
     catch(error){
         res.status(400).json()
+
     }
 
 }
