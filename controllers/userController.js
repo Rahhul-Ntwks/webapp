@@ -117,8 +117,8 @@ async function getUser(req,res){
 
 }
 
-module.exports = {
-    createUser,
-    updateUser,
-    getUser
-}
+// module.exports = {
+//     createUser,
+//     updateUser,
+//     getUser
+// }
