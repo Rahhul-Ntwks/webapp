@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo hello world"
+    "build": "echo hello world",
+    "test:integration": "jest --config=babel.config.js"
   },
   "author": "Rahhul Ganeesh Reddi Abbavaram",
   "license": "ISC",
