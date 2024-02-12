@@ -46,7 +46,6 @@ const User = sequelize.define('User', {
 });
 User.sync()
   .then(() => {
-    console.log('User table synchronized with database');
   })
   .catch(error => {
     console.error('Error synchronizing User table:', error);
