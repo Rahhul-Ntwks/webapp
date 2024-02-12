@@ -6,7 +6,7 @@ const sequelize = new Sequelize(process.env.DB_FILE,{
     freezeTableName : true
   }
 })
-console.log(process.env.DB_FILE)
+
 
 async function testConnection(){
 try {

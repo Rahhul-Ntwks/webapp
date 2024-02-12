@@ -1,13 +1,10 @@
 const User = require('../models/user');
-console.log("Initializing user controller...");
 const bcrypt = require('bcryptjs');
 const validateUser = require('../utils/validateUser');
 const { DataTypes} = require('sequelize');
 
 async function createUser(req,res){
     try{
-        console.log("Received request to create a new user.");
-        console.log(req.body);
         const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
             return res.status(406).send('Only JSON responses are accepted.');

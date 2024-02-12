@@ -1,4 +1,3 @@
-console.log("Application starting...");
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -31,9 +30,11 @@ app.all('*',(req,res)=> {
   return res.status(404).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
 })
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log(`Server listening on port 3000`)
 });
+
+module.exports = server;
 
 
 
