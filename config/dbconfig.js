@@ -15,6 +15,7 @@ const sequelize = new Sequelize({
 async function testConnection() {
   try {
     const resp = await sequelize.authenticate();
+    console.log(`resp is ${resp}`);
     return true;
   } catch (error) {
     console.error("Unable to connect to the database:", error);
