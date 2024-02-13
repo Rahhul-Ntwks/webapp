@@ -22,7 +22,7 @@ describe("User Endpoint Integration Tests", () => {
   let tableId;
   beforeAll(async () => {
     await testConnection()
-    await User.sync()
+    await User.sync({force:true})
   });
 
   it("POST user", async () => {
