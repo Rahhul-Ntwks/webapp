@@ -37,7 +37,8 @@ jobs:
 
       - name: Run integration tests for /v1/user
         env:
-            DB_FILE: ${{ secrets.DB_FILE }}
+            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: npm run test:integration
 
       - name: Clean up PostgreSQL
