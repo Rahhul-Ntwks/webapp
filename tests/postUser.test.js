@@ -23,6 +23,7 @@ describe("User Endpoint Integration Tests", () => {
     debugger;
     const response = await request(server).post("/v1/user").send(user);
     tableId = response.body.id;
+    console.log(response)
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(
       expect.objectContaining({

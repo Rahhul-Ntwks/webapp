@@ -5,8 +5,8 @@ const sequelize = new Sequelize({
   dialect: "postgres",
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  database: "postgres", // Replace 'your_database_name' with your actual database name
-  host: "localhost", // You can change the host if your database is hosted elsewhere
+  database: "postgres",
+  host: "localhost", 
   define: {
     freezeTableName: true,
   },
