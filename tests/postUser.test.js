@@ -1,6 +1,8 @@
 const request = require("supertest");
 const server = require("../index");
 const generateBasicAuthHeader = require("../utils/Hashgenerator");
+const {testConnection,sequelize} = require('../config/dbconfig');
+const User = require('../models/user');
 
 describe("User Endpoint Integration Tests", () => {
   const randomNumber = Math.floor(Math.random() * 10000);
@@ -18,6 +20,10 @@ describe("User Endpoint Integration Tests", () => {
   const hash = generateBasicAuthHeader(user.username, user.password);
   const updateHash = generateBasicAuthHeader(user.username, putUser.password);
   let tableId;
+  beforeAll(async () => {
+    await await testConnection()
+    await User.sync()
+  });
 
   it("POST user", async () => {
     debugger;
