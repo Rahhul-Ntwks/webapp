@@ -22,18 +22,20 @@ describe("User Endpoint Integration Tests", () => {
   let tableId;
   beforeAll(async () => {
     try{
-    await testConnection()
     await User.sync({force:true})
     }catch(error){
       console.log(`user error is ${error}`)
     }
   });
+  it("Health enpoint", async () => {
+    const response = await request(server).get("/healthz")
+    expect(response.statusCode).toEqual(200)
+  })
 
   it("POST user", async () => {
-    debugger;
+
     const response = await request(server).post("/v1/user").send(user);
     tableId = response.body.id;
-    console.log(response)
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(
       expect.objectContaining({
