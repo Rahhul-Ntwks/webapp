@@ -21,12 +21,9 @@ describe("User Endpoint Integration Tests", () => {
   const updateHash = generateBasicAuthHeader(user.username, putUser.password);
   let tableId;
   beforeAll(async () => {
-    try{
     await testConnection()
     await User.sync({force:true})
-    }catch(error){
       console.log(`user error is ${error}`)
-    }
   });
 
   it("POST user", async () => {
