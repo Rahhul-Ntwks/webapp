@@ -19,13 +19,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '21'
+          node-version: '14'
 
       - name: Install PostgreSQL
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql
           sudo service postgresql start
+
+      - name: Drop PostgreSQL database if exists
+        run: |
+          sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
 
       - name: Check if PostgreSQL role exists
         run: |
@@ -50,4 +54,3 @@ jobs:
 
       - name: Clean up PostgreSQL
         run: sudo service postgresql stop
-
