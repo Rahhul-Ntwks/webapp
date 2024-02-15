@@ -25,6 +25,7 @@ jobs:
       - name: Clean up existing PostgreSQL service
         run: |
           sudo service postgresql stop || true
+          sleep 5  # Wait for 5 seconds to ensure the service stops completely
 
       # Install PostgreSQL
       - name: Install PostgreSQL
@@ -36,6 +37,7 @@ jobs:
       # Drop existing database and user if they exist
       - name: Drop existing PostgreSQL database and user
         run: |
+          sudo -u postgres psql -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '${{ secrets.POSTGRES_DB }}' AND pid <> pg_backend_pid();"
           sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
           sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
           echo "Cleaned up existing PostgreSQL resources"
