@@ -20,13 +20,14 @@ describe("User Endpoint Integration Tests", () => {
   const hash = generateBasicAuthHeader(user.username, user.password);
   const updateHash = generateBasicAuthHeader(user.username, putUser.password);
   let tableId;
-
+  beforeAll(async () => {
+    await User.sync({force:true})
+  });
 
   it("POST user", async () => {
     debugger;
     const response = await request(server).post("/v1/user").send(user);
     tableId = response.body.id;
-    console.log(response)
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(
       expect.objectContaining({

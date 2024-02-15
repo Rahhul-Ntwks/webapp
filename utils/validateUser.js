@@ -22,7 +22,6 @@ const validateUser = async (authorizationHeader) => {
         };;
 
     } catch (error) {
-        console.error('Error while validating user:', error);
         return {
             success: false,
             username: username
