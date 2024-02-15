@@ -41,6 +41,7 @@ jobs:
             POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: npx jest
 
-      - name: Clean up PostgreSQL
+      - name: Clean up PostgreSQL service
         run: |
-          # Add cleanup steps here if needed
+          docker stop ${{ job.services.postgres.id }}
+          docker rm ${{ job.services.postgres.id }}
