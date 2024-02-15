@@ -21,18 +21,26 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Clean up existing PostgreSQL resources
+      # Stop any existing PostgreSQL service
+      - name: Clean up existing PostgreSQL service
         run: |
-          sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
-          sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
-          echo "Cleaned up existing PostgreSQL resources"
+          sudo service postgresql stop || true
 
+      # Install PostgreSQL
       - name: Install PostgreSQL
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql
           sudo service postgresql start
 
+      # Drop existing database and user if they exist
+      - name: Drop existing PostgreSQL database and user
+        run: |
+          sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
+          sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
+          echo "Cleaned up existing PostgreSQL resources"
+
+      # Set up PostgreSQL user and database
       - name: Set up PostgreSQL user and database
         run: |
           sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
@@ -40,14 +48,17 @@ jobs:
           sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};"
           echo "Set up PostgreSQL user and database"
 
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # Run integration tests for /v1/user
       - name: Run integration tests for /v1/user
         env:
             POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: npx jest
 
+      # Clean up PostgreSQL
       - name: Clean up PostgreSQL
         run: sudo service postgresql stop
