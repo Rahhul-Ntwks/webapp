@@ -27,13 +27,6 @@ jobs:
           sudo service postgresql stop || true
           sleep 5  # Wait for 5 seconds to ensure the service stops completely
 
-      # Install PostgreSQL
-      - name: Install PostgreSQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql
-          sudo service postgresql start
-
       # Drop existing database and user if they exist
       - name: Drop existing PostgreSQL database and user
         run: |
@@ -41,6 +34,13 @@ jobs:
           sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
           sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
           echo "Cleaned up existing PostgreSQL resources"
+
+      # Install PostgreSQL
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql
+          sudo service postgresql start
 
       # Set up PostgreSQL user and database
       - name: Set up PostgreSQL user and database
