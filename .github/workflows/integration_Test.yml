@@ -50,3 +50,4 @@ jobs:
 
       - name: Clean up PostgreSQL
         run: sudo service postgresql stop
+
