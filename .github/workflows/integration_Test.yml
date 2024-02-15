@@ -27,9 +27,18 @@ jobs:
           sudo apt-get install -y postgresql
           sudo service postgresql start
 
-      - name: Set up PostgreSQL user and database
+      - name: Check if PostgreSQL role exists
         run: |
-          sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
+          role_exist=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='${{ secrets.POSTGRES_USER }}'")
+          if [[ -z $role_exist ]]; then
+            sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
+          else
+            echo "Role '${{ secrets.POSTGRES_USER }}' already exists."
+            sudo -u postgres psql -c "ALTER USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
+          fi
+
+      - name: Create PostgreSQL database
+        run: |
           sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
           sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};"
 
