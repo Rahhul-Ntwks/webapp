@@ -20,9 +20,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-
       - name: Clean up existing PostgreSQL service
-        run: docker stop $(docker ps -a -q) || true
+        run: |
+            docker ps -q --filter "ancestor=postgres:latest" | xargs -r docker stop || true
+        
 
       - name: Install PostgreSQL
         run: |
