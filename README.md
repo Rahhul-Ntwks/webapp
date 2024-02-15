@@ -1,5 +1,36 @@
+# WebApp
 
-The server will start, and you should see output indicating that the server is running on a specific port.
+## Overview
+WebApp is a simple web application for managing user accounts. It allows users to create, get, and update user information.
+
+## Features
+- User registration
+- User authentication using basic authentication
+- Profile management (update user information)
+- Integration tests using Jest
+- GitHub Actions workflow for automated testing
+
+## Technologies Used
+- Sequelize
+- PostgreSQL
+- Express.js
+- Jest
+- GitHub Actions
+
+## Dependencies
+
+- [Express](https://expressjs.com/): Fast, unopinionated, minimalist web framework for Node.js
+
+## Authentication
+
+The API endpoints require basic authentication. Ensure that you include the correct credentials (username and password) in the request headers to access the endpoints.
+
+## Installation
+To install and set up this web application locally, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Rahhul1309/webapp.git
 
 ## Routes
 
@@ -7,12 +38,9 @@ The server will start, and you should see output indicating that the server is r
 - **GET** `/v1/user/self`: Get user details by ID.
 - **PUT** `/api/user/self`: Update user details by ID.
 
-## Authentication
+2. Install the dependencies :
+   npm install
 
-The API endpoints require basic authentication. Ensure that you include the correct credentials (username and password) in the request headers to access the endpoints.
-
-## Dependencies
-
-- [Express](https://expressjs.com/): Fast, unopinionated, minimalist web framework for Node.js.
-- [dotenv](https://www.npmjs.com/package/dotenv): Loads environment variables from a `.env` file into `process.env`.
+3. Run the automation tests :
+   npx jest
 
