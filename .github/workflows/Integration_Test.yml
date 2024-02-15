@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Clean up existing PostgreSQL service
+        run: docker stop $(docker ps -a -q) || true
+
       - name: Install PostgreSQL
         run: |
           sudo apt-get update
@@ -37,6 +40,9 @@ jobs:
         run: npm install
 
       - name: Run integration tests for /v1/user
+        env:
+            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: npx jest
 
       - name: Clean up PostgreSQL
