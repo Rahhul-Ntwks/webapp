@@ -12,17 +12,6 @@ jobs:
   integration_tests:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,17 +19,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '21'
+
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql
+          sudo service postgresql start
+
+      - name: Set up PostgreSQL user and database
+        run: |
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};"
 
       - name: Install dependencies
         run: npm install
 
       - name: Run integration tests for /v1/user
-        env:
-            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: npx jest
 
       - name: Clean up PostgreSQL
-        run: |
-          # Add cleanup steps here if needed
+        run: sudo service postgresql stop
