@@ -1,0 +1,66 @@
+name: Integration Tests - /v1/user Endpoint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  integration_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Stop any existing PostgreSQL service
+      - name: Clean up existing PostgreSQL service
+        run: |
+          sudo service postgresql stop || true
+          sleep 5  # Wait for 5 seconds to ensure the service stops completely
+
+      # Drop existing database and user if they exist
+      - name: Drop existing PostgreSQL database and user
+        run: |
+          sudo -u postgres psql -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '${{ secrets.POSTGRES_DB }}' AND pid <> pg_backend_pid();"
+          sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
+          sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
+          echo "Cleaned up existing PostgreSQL resources"
+
+      # Install PostgreSQL
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql
+          sudo service postgresql start
+
+      # Set up PostgreSQL user and database
+      - name: Set up PostgreSQL user and database
+        run: |
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};"
+          echo "Set up PostgreSQL user and database"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run integration tests for /v1/user
+      - name: Run integration tests for /v1/user
+        env:
+            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: npx jest
+
+      # Clean up PostgreSQL
+      - name: Clean up PostgreSQL
+        run: sudo service postgresql stop
