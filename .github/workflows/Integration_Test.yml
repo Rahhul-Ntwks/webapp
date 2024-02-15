@@ -20,10 +20,12 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Clean up existing PostgreSQL service
+
+      - name: Clean up existing PostgreSQL resources
         run: |
-            docker ps -q --filter "ancestor=postgres:latest" | xargs -r docker stop || true
-        
+          sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${{ secrets.POSTGRES_DB }};"
+          sudo -u postgres psql -c "DROP USER IF EXISTS ${{ secrets.POSTGRES_USER }};"
+          echo "Cleaned up existing PostgreSQL resources"
 
       - name: Install PostgreSQL
         run: |
@@ -36,6 +38,7 @@ jobs:
           sudo -u postgres psql -c "CREATE USER ${{ secrets.POSTGRES_USER }} WITH PASSWORD '${{ secrets.POSTGRES_PASSWORD }}';"
           sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.POSTGRES_DB }};"
           sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.POSTGRES_DB }} TO ${{ secrets.POSTGRES_USER }};"
+          echo "Set up PostgreSQL user and database"
 
       - name: Install dependencies
         run: npm install
