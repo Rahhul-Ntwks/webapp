@@ -16,6 +16,9 @@ jobs:
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
         id: setup
+
+      - name: Packer initialize
+        run: packer init .
       
       - name: Format Packer Template
         id: fmt
