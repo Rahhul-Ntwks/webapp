@@ -1,0 +1,20 @@
+Description=webapp
+After=network.target
+Wants=cloud-init.target
+ 
+ 
+ 
+[Service]
+WorkingDirectory= /home/csye6225/webapp/webapp
+ExecStart=/usr/bin/node /home/csye6225/webapp/webappindex.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=webapp
+User=csye6225
+ 
+ 
+ 
+[Install]
+WantedBy=multi-user.target

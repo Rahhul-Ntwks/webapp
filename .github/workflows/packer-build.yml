@@ -1,0 +1,32 @@
+name: Run Packer Build on a Template File
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  packer_build:
+    runs-on: ubuntu-latest
+    name: Build Custom Image with Packer
+
+    steps:
+      - name: Install yum
+        run: sudo apt-get update && sudo apt-get install -y yum
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Packer
+        run: sudo yum -y install packer
+
+      - name: Check Packer Version
+        run: packer -v
+
+      - name: Authenticate Google Cloud SDK
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: ${{ secrets.GCP_SECRET_KEYS }}
+
+      - name: Run Packer Build
+        run: |
+          packer build ../packer_config.pkr.hcl
