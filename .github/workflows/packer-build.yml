@@ -39,7 +39,7 @@ jobs:
   
       - name: Run Packer Build
         run: |
-          packer build ../packer_config.pkr.hcl \
+          packer build packer_config.pkr.hcl \
           -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
           -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
           -var 'SSH_USERNAME=${{ secrets.SSH_USERNAME }}' \
