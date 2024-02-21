@@ -45,6 +45,9 @@ echo "The .env file has been created with the PostgreSQL values."
 
 
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
+ls /etc/systemd/system/
+sudo dnf install nano -y
+sudo cat /etc/systemd/system/webapp.service
 sudo systemctl daemon-reload
 sudo systemctl enable webapp
 sudo systemctl start webapp

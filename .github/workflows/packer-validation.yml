@@ -17,6 +17,11 @@ jobs:
         uses: hashicorp/setup-packer@main
         id: setup
 
+      - name: Authenticate Google Cloud SDK
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: './keys.json'
+
       - name: Packer initialize
         run: packer init .
       
