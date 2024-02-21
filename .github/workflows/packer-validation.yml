@@ -37,12 +37,18 @@ jobs:
           filename: 'webapp.zip'
           exclusions: '*.git* /*node_modules/* '
         
-      - name: Format Packer Template
-        id: fmt
-        run: packer fmt .
-        
-      - name: Validate Packer Template
-        id: validate
-        run: packer validate .
+      - name: Run packer fmt
+        run: |
+          if ! packer fmt -check .; then
+          echo "Packer template is not properly formatted."
+          exit 1
+          fi
+  
+      - name: Run packer validate
+        run: |
+          if ! packer validate .; then
+          echo "Packer template validation failed."
+          exit 1
+          fi
   
 

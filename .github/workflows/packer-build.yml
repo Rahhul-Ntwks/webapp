@@ -47,6 +47,13 @@ jobs:
         
       - name: Run Packer Build
         run: |
-          packer build --force packer_config.pkr.hcl 
+          packer build \
+          -var 'PROJECT_ID=${var.PROJECT_ID}' \
+          -var 'SOURCE_IMAGE_FAMILY=${var.SOURCE_IMAGE_FAMILY}' \
+          -var 'SSH_USERNAME=${var.SSH_USERNAME}' \
+          -var 'IMAGE_NAME=${var.IMAGE_NAME}-${formatdate("YYYYMMDDHHmmss",timestamp())}' \
+          -var 'IMAGE_FAMILY=${var.IMAGE_FAMILY}' \
+          -var 'ZONE=${var.ZONE}' \
+          packer_config.pkr.hcl
   
 
