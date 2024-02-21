@@ -44,3 +44,12 @@ To install and set up this web application locally, follow these steps:
 3. Run the automation tests :
    npx jest
 
+## Gcloud authentication for github actions
+ https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
+
+ steps:
+- id: 'auth'
+  name: 'Authenticate to Google Cloud'
+  uses: `google-github-actions/auth@v0.4.0'
+  with:
+    credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
