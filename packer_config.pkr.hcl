@@ -22,10 +22,6 @@ variable "ZONE"{
   type = string
   default = "us-central1-a"
 }
-variable "CREDENTIALS_FILE"{
-  type = string
-  default = "CREDENTIALS_FILE"
-}
 variable "POSTGRES_DB" {
   type    = string
   default = "default_db"
@@ -57,7 +53,6 @@ source "googlecompute" "example" {
     image_name          = "${var.IMAGE_NAME}"
     image_family        = "${var.IMAGE_FAMILY}"
     zone                = "${var.ZONE}"
-    credentials_file    = "${var.CREDENTIALS_FILE}"
 }
 
 build {
