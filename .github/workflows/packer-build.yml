@@ -51,15 +51,7 @@ jobs:
       
       - name: Check Downloaded Artifact
         run: ls -l /tmp/release
-
-      - name: Check File Structure
-        run: |
-          echo "1"
-          find / -type f -name "packer_config.pkr.hcl" 2>/dev/null
-          echo "2"
-          find / -type f -name "release-zip" 2>/dev/null
-          
-
+      
       - name: Run Packer Build
         run: |
           packer build ../packer_config.pkr.hcl \
