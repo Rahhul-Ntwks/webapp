@@ -24,7 +24,21 @@ variable "ZONE"{
 }
 variable "CREDENTIALS_FILE"{
   type = string
-  default = "credentials_file"
+  default = "CREDENTIALS_FILE"
+}
+variable "POSTGRES_DB" {
+  type    = string
+  default = "default_db"
+}
+
+variable "POSTGRES_PASSWORD" {
+  type    = string
+  default = "password"
+}
+
+variable "POSTGRES_USER" {
+  type    = string
+  default = "user"
 }
 
 packer {
