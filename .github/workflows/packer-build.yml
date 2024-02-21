@@ -16,17 +16,49 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install Packer
-        run: sudo yum -y install packer
-
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
+        
       - name: Check Packer Version
         run: packer -v
+      
+      - name: Add required plugins
+        run: packer init .
 
       - name: Authenticate Google Cloud SDK
         uses: google-github-actions/auth@v0.4.0
         with:
           credentials_json: ${{ secrets.GCP_SECRET_KEYS }}
+      
+      - name: Archive Release
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          type: 'zip'
+          filename: 'release.zip'
+          exclusions: '*.git* /*node_modules/* '
+  
+      - name: Upload Archive as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-zip
+          path: release.zip
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release-zip
+          path: /tmp/release
 
       - name: Run Packer Build
         run: |
-          packer build ../packer_config.pkr.hcl
+          packer build ../packer_config.pkr.hcl \
+          -var    PROJECT_ID  = ${{ secrets.PROJECT_ID }} \
+          -var SOURCE_IMAGE_FAMILY = ${{ secrets.SOURCE_IMAGE_FAMILY }} \
+          -var SSH_USERNAME        = ${{ secrets.SSH_USERNAME }} \
+          -var IMAGE_NAME          = ${{ secrets.IMAGE_NAME }} \
+          -var IMAGE_FAMILY        = ${{ secrets.IMAGE_FAMILY }} \
+          -var ZONE                = ${{ secrets.ZONE }} \
+          -var CREDENTIALS_FILE    = ${{ secrets.CREDENTIALS_FILE }}\
+          -var ZIP_FILE = '/tmp/release/release-zip'
