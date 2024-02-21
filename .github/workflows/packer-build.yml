@@ -43,7 +43,7 @@ jobs:
         
       - name: Validate Packer Template
         id: validate
-        run: packer validate . -var "CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}"
+        run: packer validate -var "CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}" .
         
       - name: Run Packer Build
         run: |
