@@ -14,7 +14,7 @@ sudo systemctl status postgresql
 
 sudo -u postgres createuser --superuser $POSTGRES_USER
 sudo -u postgres createdb $POSTGRES_DB
-sudo -u postgres psql -c "ALTER USER $USERNAME WITH ENCRYPTED PASSWORD '$POSTGRES_PASSWORD';"
+sudo -u postgres psql -c "ALTER USER $POSTGRES_USER WITH ENCRYPTED PASSWORD '$POSTGRES_PASSWORD';"
 sudo -u postgres psql -c "ALTER DATABASE $POSTGRES_DB OWNER TO $POSTGRES_USER;"
 
 
