@@ -48,6 +48,9 @@ jobs:
         with:
           name: release-zip
           path: /tmp/release
+      
+      - name: Check Downloaded Artifact
+        run: ls -l /tmp/release
 
       - name: Check File Structure
         run: |
