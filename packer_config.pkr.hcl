@@ -1,40 +1,40 @@
 variable "PROJECT_ID" {
   type    = string
-  default = "dev-project-414806"
+  default = "PROJECT_ID"
 }
 variable "SOURCE_IMAGE_FAMILY" {
   type    = string
-  default = "centos-stream-8"
+  default = "SOURCE_IMAGE_FAMILY"
 }
 variable "SSH_USERNAME" {
   type    = string
-  default = "centos"
+  default = "SSH_USERNAME"
 }
 variable "IMAGE_NAME" {
   type    = string
-  default = "dev-packer"
+  default = "IMAGE_NAME"
 }
 variable "IMAGE_FAMILY" {
   type    = string
-  default = "devpackerfamily"
+  default = "IMAGE_FAMILY"
 }
 variable "ZONE" {
   type    = string
-  default = "us-central1-a"
+  default = "ZONE"
 }
 variable "POSTGRES_DB" {
   type    = string
-  default = "rahhul"
+  default = "POSTGRES_DB"
 }
 
 variable "POSTGRES_PASSWORD" {
   type    = string
-  default = "password"
+  default = "POSTGRES_PASSWORD"
 }
 
 variable "POSTGRES_USER" {
   type    = string
-  default = "rahhul"
+  default = "POSTGRES_USER"
 }
 
 packer {
