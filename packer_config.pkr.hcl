@@ -24,7 +24,7 @@ variable "ZONE"{
 }
 variable "POSTGRES_DB" {
   type    = string
-  default = "default_db"
+  default = "rahhul"
 }
 
 variable "POSTGRES_PASSWORD" {
@@ -34,7 +34,7 @@ variable "POSTGRES_PASSWORD" {
 
 variable "POSTGRES_USER" {
   type    = string
-  default = "user"
+  default = "rahhul"
 }
 
 packer {
