@@ -39,6 +39,13 @@ jobs:
   
       - name: Run Packer Build
         run: |
+          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}"
+          echo "SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}"
+          echo "SSH_USERNAME=${{ secrets.SSH_USERNAME }}"
+          echo "IMAGE_NAME=${{ secrets.IMAGE_NAME }}"
+          echo "IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}"
+          echo "ZONE=${{ secrets.ZONE }}"
+          echo "CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}"
           packer build packer_config.pkr.hcl \
           -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
           -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
