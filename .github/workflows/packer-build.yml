@@ -30,28 +30,13 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SECRET_KEYS }}
       
-      - name: Archive Release
-        uses: thedoctor0/zip-release@0.7.5
+      - name: zip the file
+        uses: thedoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: 'release.zip'
+          filename: 'webapp.zip'
           exclusions: '*.git* /*node_modules/* '
   
-      - name: Upload Archive as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-zip
-          path: release.zip
-          
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: release-zip
-          path: /tmp/release
-      
-      - name: Check Downloaded Artifact
-        run: ls -l /tmp/release
-      
       - name: Run Packer Build
         run: |
           packer build ../packer_config.pkr.hcl \
@@ -62,9 +47,5 @@ jobs:
           -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
           -var 'ZONE=${{ secrets.ZONE }}' \
           -var 'CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}' \
-          -var 'ZIP_FILE=/tmp/release/release.zip' \
-          -debug > packer_build.log
-        
-      - name: Read Packer Build Logs
-        run: cat packer_build.log
+  
 

@@ -54,7 +54,7 @@ build {
     }
 
     provisioner "file" {
-        source      = "webapp.zip"  
+        source      = "./webapp.zip"  
         destination = "/home/centos/webapp.zip"
     }
 
