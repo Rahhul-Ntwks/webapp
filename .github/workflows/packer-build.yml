@@ -51,10 +51,11 @@ jobs:
 
       - name: Check File Structure
         run: |
-          echo "Listing files in the directory containing packer_config.pkr.hcl:"
-          ls -l ../
-          echo "Listing files in the directory containing release-zip:"
-          ls -l /tmp/release/
+          echo "1"
+          find / -type f -name "packer_config.pkr.hcl" 2>/dev/null
+          echo "2"
+          find / -type f -name "release-zip" 2>/dev/null
+          
 
       - name: Run Packer Build
         run: |
