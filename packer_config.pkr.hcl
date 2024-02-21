@@ -14,12 +14,12 @@ variable "IMAGE_NAME" {
   type    = string
   default = "dev-packer"
 }
-variable "IMAGE_FAMILY"{
-  type = string
+variable "IMAGE_FAMILY" {
+  type    = string
   default = "devpackerfamily"
 }
-variable "ZONE"{
-  type = string
+variable "ZONE" {
+  type    = string
   default = "us-central1-a"
 }
 variable "POSTGRES_DB" {
@@ -47,51 +47,47 @@ packer {
 }
 
 source "googlecompute" "example" {
-    project_id          = "${var.PROJECT_ID}"
-    source_image_family = "${var.SOURCE_IMAGE_FAMILY}"
-    ssh_username        = "${var.SSH_USERNAME}"
-    image_name          = "${var.IMAGE_NAME}-${formatdate("YYYYMMDDHHmmss",timestamp())}"
-    image_family        = "${var.IMAGE_FAMILY}"
-    zone                = "${var.ZONE}"
+  project_id          = "${var.PROJECT_ID}"
+  source_image_family = "${var.SOURCE_IMAGE_FAMILY}"
+  ssh_username        = "${var.SSH_USERNAME}"
+  image_name          = "${var.IMAGE_NAME}"
+  image_family        = "${var.IMAGE_FAMILY}"
+  zone                = "${var.ZONE}"
 }
 
 build {
-    sources = ["source.googlecompute.example"]
+  sources = ["source.googlecompute.example"]
 
-    provisioner "shell" {
-      inline = ["echo 'Hello, World!'"]
-    }
+  provisioner "shell" {
+    inline = ["echo 'Hello, World!'"]
+  }
 
-    provisioner "file" {
-        source      = "./webapp.zip"  
-        destination = "/home/centos/webapp.zip"
-    }
+  provisioner "file" {
+    source      = "./webapp.zip"
+    destination = "/home/centos/webapp.zip"
+  }
 
-    provisioner "file" {
+  provisioner "file" {
     source      = "webapp.service"
     destination = "/tmp/webapp.service"
   }
 
-    provisioner "shell" {
-      environment_vars = [
+  provisioner "shell" {
+    environment_vars = [
       "POSTGRES_DB=${var.POSTGRES_DB}",
       "POSTGRES_PASSWORD=${var.POSTGRES_PASSWORD}",
       "POSTGRES_USER=${var.POSTGRES_USER}",
     ]
-      script = "postgres.sh"
-    }
+    script = "postgres.sh"
+  }
 
-    provisioner "shell" {
-      environment_vars = [
+  provisioner "shell" {
+    environment_vars = [
       "POSTGRES_DB=${var.POSTGRES_DB}",
       "POSTGRES_PASSWORD=${var.POSTGRES_PASSWORD}",
       "POSTGRES_USER=${var.POSTGRES_USER}",
     ]
-      script = "script.sh"
-    }
-
-    
-
-    
+    script = "script.sh"
+  }
 }
 
