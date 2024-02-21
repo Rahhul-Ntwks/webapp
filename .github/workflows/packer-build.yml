@@ -43,7 +43,7 @@ jobs:
         
       - name: Validate Packer Template
         id: validate
-        run: packer validate -var  .
+        run: packer validate .
         
       - name: Run Packer Build
         run: |
