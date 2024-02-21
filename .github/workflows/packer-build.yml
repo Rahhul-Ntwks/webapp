@@ -47,6 +47,6 @@ jobs:
         
       - name: Run Packer Build
         run: |
-          packer build ../packer_config.pkr.hcl 
+          packer build packer_config.pkr.hcl 
   
 
