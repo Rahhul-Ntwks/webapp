@@ -1,4 +1,4 @@
-sudo dnf update
+
 
 sudo dnf remove nsolid nodejs -y
 sudo dnf clean all
