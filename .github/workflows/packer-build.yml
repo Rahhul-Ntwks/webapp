@@ -39,6 +39,6 @@ jobs:
   
       - name: Run Packer Build
         run: |
-          packer build packer_config.pkr.hcl -var 'CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}'
+          packer build ../packer_config.pkr.hcl -var 'CREDENTIALS_FILE=${{ secrets.CREDENTIALS_FILE }}'
   
 
