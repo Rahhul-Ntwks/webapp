@@ -1,35 +1,48 @@
-name: packer_validation
-
+name: Run Packer Validate on a Template File
 on:
   pull_request:
     branches:
       - main
 
 jobs:
-  packer:
+  packer_build:
     runs-on: ubuntu-latest
-    name: packer_validation
+    name: validate Custom Image with Packer
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup Packer
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup `packer`
         uses: hashicorp/setup-packer@main
         id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
+        
+      - name: Check Packer Version
+        run: packer -v
+      
+      - name: Add required plugins
+        run: packer init .
 
       - name: Authenticate Google Cloud SDK
         uses: google-github-actions/auth@v0.4.0
         with:
           credentials_json: ${{ secrets.GCP_SECRET_KEYS }}
-
-      - name: Packer initialize
-        run: packer init .
       
+      - name: zip the file
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: 'webapp.zip'
+          exclusions: '*.git* /*node_modules/* '
+        
       - name: Format Packer Template
         id: fmt
         run: packer fmt .
-      
+        
       - name: Validate Packer Template
         id: validate
         run: packer validate .
-    
+  
+
