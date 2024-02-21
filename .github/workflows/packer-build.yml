@@ -42,11 +42,19 @@ jobs:
         with:
           name: release-zip
           path: release.zip
+          
       - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
           name: release-zip
           path: /tmp/release
+
+      - name: Check File Structure
+        run: |
+          echo "Listing files in the directory containing packer_config.pkr.hcl:"
+          ls -l ../
+          echo "Listing files in the directory containing release-zip:"
+          ls -l /tmp/release/
 
       - name: Run Packer Build
         run: |
