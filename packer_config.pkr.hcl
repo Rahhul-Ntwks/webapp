@@ -1,26 +1,26 @@
 variable "PROJECT_ID" {
   type    = string
-  default = "project_id"
+  default = "dev-project-414806"
 }
 variable "SOURCE_IMAGE_FAMILY" {
   type    = string
-  default = "source_image_family"
+  default = "centos-stream-8"
 }
 variable "SSH_USERNAME" {
   type    = string
-  default = "ssh_username"
+  default = "centos"
 }
 variable "IMAGE_NAME" {
   type    = string
-  default = "image_name"
+  default = "dev-packer"
 }
 variable "IMAGE_FAMILY"{
   type = string
-  default = "image_family"
+  default = "devpackerfamily"
 }
 variable "ZONE"{
   type = string
-  default = "zone"
+  default = "us-central1-a"
 }
 variable "CREDENTIALS_FILE"{
   type = string
