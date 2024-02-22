@@ -50,7 +50,7 @@ source "googlecompute" "example" {
   project_id          = "${var.PROJECT_ID}"
   source_image_family = "${var.SOURCE_IMAGE_FAMILY}"
   ssh_username        = "${var.SSH_USERNAME}"
-  image_name          = "${lower(var.IMAGE_NAME)}-${formatdate("YYYYMMDDHHmmss", timestamp())}"
+  image_name          = "${var.IMAGE_NAME}"
   image_family        = "${var.IMAGE_FAMILY}"
   zone                = "${var.ZONE}"
 }
