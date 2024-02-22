@@ -1,6 +1,6 @@
 name: Run Packer Build on a Template File
 on:
-  pull_request:
+  push:
     branches:
       - main
 
