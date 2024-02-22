@@ -12,11 +12,11 @@ variable "SSH_USERNAME" {
 }
 variable "IMAGE_NAME" {
   type    = string
-  default = "IMAGE_NAME"
+  default = "IMAGE-NAME"
 }
 variable "IMAGE_FAMILY" {
   type    = string
-  default = "IMAGE_FAMILY"
+  default = "IMAGE-FAMILY"
 }
 variable "ZONE" {
   type    = string
