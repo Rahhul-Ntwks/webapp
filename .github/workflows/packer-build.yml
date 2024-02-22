@@ -62,6 +62,7 @@ jobs:
           -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
           -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
           -var 'ZONE=${{ secrets.ZONE }}' \
+          -force \
           packer_config.pkr.hcl
   
 
