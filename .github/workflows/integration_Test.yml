@@ -1,9 +1,6 @@
 name: Integration Tests - /v1/user Endpoint
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
