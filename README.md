@@ -54,4 +54,3 @@ To install and set up this web application locally, follow these steps:
   with:
     credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
-  Test
