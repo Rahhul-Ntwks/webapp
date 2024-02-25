@@ -22,20 +22,6 @@ variable "ZONE" {
   type    = string
   default = "ZONE"
 }
-variable "POSTGRES_DB" {
-  type    = string
-  default = "POSTGRES_DB"
-}
-
-variable "POSTGRES_PASSWORD" {
-  type    = string
-  default = "POSTGRES_PASSWORD"
-}
-
-variable "POSTGRES_USER" {
-  type    = string
-  default = "POSTGRES_USER"
-}
 
 packer {
   required_plugins {
@@ -73,20 +59,10 @@ build {
   }
 
   provisioner "shell" {
-    environment_vars = [
-      "POSTGRES_DB=${var.POSTGRES_DB}",
-      "POSTGRES_PASSWORD=${var.POSTGRES_PASSWORD}",
-      "POSTGRES_USER=${var.POSTGRES_USER}",
-    ]
     script = "postgres.sh"
   }
 
   provisioner "shell" {
-    environment_vars = [
-      "POSTGRES_DB=${var.POSTGRES_DB}",
-      "POSTGRES_PASSWORD=${var.POSTGRES_PASSWORD}",
-      "POSTGRES_USER=${var.POSTGRES_USER}",
-    ]
     script = "script.sh"
   }
 }
