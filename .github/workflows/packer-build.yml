@@ -1,15 +1,13 @@
-name: Run Packer Build on Merge
-
+name: Run Packer Build on a Template File
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches:
+      - main
 
 jobs:
   packer_build:
     runs-on: ubuntu-latest
     name: Build Custom Image with Packer
-
-    if: github.event.pull_request.merged == true
 
     steps:
       - name: Checkout Repository
@@ -66,3 +64,5 @@ jobs:
           -var 'ZONE=${{ secrets.ZONE }}' \
           -force \
           packer_config.pkr.hcl
+  
+
