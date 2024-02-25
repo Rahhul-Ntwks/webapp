@@ -53,7 +53,7 @@ source "googlecompute" "example" {
   image_name          = "${var.IMAGE_NAME}"
   image_family        = "${var.IMAGE_FAMILY}"
   zone                = "${var.ZONE}"
-}
+
 
 build {
   sources = ["source.googlecompute.example"]
