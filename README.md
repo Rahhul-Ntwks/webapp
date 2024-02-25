@@ -53,3 +53,5 @@ To install and set up this web application locally, follow these steps:
   uses: `google-github-actions/auth@v0.4.0'
   with:
     credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+  Test
