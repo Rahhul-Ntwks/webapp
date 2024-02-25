@@ -30,20 +30,6 @@ sudo ls -ltrah
 sudo npm ci
 sudo npm install --save
 
-ENV_FILE=".env"
-sudo tee "$ENV_FILE" > /dev/null << EOF
-POSTGRES_DB="$POSTGRES_DB"
-POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
-POSTGRES_USER="$POSTGRES_USER"
-EOF
-
-echo "lavada code"
-cat .env
-
-echo "The .env file has been created with the PostgreSQL values."
-
-
-
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
 ls /etc/systemd/system/
 sudo dnf install nano -y
