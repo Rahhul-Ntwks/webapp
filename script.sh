@@ -25,7 +25,6 @@ sudo unzip webapp.zip
 cd webapp
 
 sudo ls -ltrah
-mv /tmp/.env /home/csye6225/webapp/webapp
 sudo npm ci
 sudo npm install --save
 
