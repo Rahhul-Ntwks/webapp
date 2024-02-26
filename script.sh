@@ -17,12 +17,13 @@ sudo useradd -r -g csye6225 -s /usr/sbin/nologin csye6225 || true
 
 
 sudo mkdir -p /home/csye6225/webapp
-sudo chmod -R 755 /home/csye6225
-sudo chown -R csye6225:csye6225 /home/csye6225
+
 sudo cp /home/centos/webapp.zip /home/csye6225/webapp/webapp.zip
 cd /home/csye6225/webapp
 sudo unzip webapp.zip
 cd webapp
+sudo chmod -R 755 /home/csye6225
+sudo chown -R csye6225:csye6225 /home/csye6225
 
 sudo ls -ltrah
 sudo npm ci
