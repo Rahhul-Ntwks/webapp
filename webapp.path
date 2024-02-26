@@ -1,0 +1,10 @@
+[Unit]
+Description= waiting for startup Script
+
+[Path] 
+PathExists = /opt/startupdb.sh
+
+[Install] 
+WantedBy = multi-user.target
+
+

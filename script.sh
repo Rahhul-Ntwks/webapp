@@ -31,12 +31,13 @@ sudo npm ci
 sudo npm install --save
 
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
+sudo mv /tmp/webapp.path /etc/systemd/system/webapp.path
 ls /etc/systemd/system/
 sudo dnf install nano -y
 sudo cat /etc/systemd/system/webapp.service
 sudo systemctl daemon-reload
-sudo systemctl enable webapp
-sudo systemctl start webapp
+sudo systemctl enable webapp.path
+sudo systemctl start webapp.path
 
 sudo echo $?
 

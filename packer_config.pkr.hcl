@@ -57,11 +57,10 @@ build {
     source      = "webapp.service"
     destination = "/tmp/webapp.service"
   }
-
-  provisioner "shell" {
-    script = "postgres.sh"
+  provisioner "file" {
+    source      = "webapp.path"
+    destination = "/tmp/webapp.path"
   }
-
   provisioner "shell" {
     script = "script.sh"
   }
