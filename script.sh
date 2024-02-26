@@ -28,7 +28,7 @@ sudo chown -R csye6225:csye6225 /home/csye6225
 sudo ls -ltrah
 sudo npm ci
 sudo npm install --save
-
+touch /tmp/.env
 sudo mv /tmp/webapp.service /etc/systemd/system/webapp.service
 sudo mv /tmp/webapp.path /etc/systemd/system/webapp.path
 ls /etc/systemd/system/
