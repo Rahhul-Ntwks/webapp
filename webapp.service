@@ -14,6 +14,7 @@ StandardError=syslog
 SyslogIdentifier=webapp
 Group=csye6225
 User=csye6225
+EnvironmentFile=/tmp/.env
  
  
  
