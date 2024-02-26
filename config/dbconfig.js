@@ -6,7 +6,7 @@ const sequelize = new Sequelize({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  host: "localhost", 
+  host: process.env.HOST, 
   define: {
     freezeTableName: true,
   },
