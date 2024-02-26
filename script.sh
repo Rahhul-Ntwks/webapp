@@ -16,7 +16,6 @@ sudo groupadd -r csye6225 || true
 sudo useradd -r -g csye6225 -s /usr/sbin/nologin csye6225 || true
 
 
-
 sudo mkdir -p /home/csye6225/webapp
 sudo chmod -R 755 /home/csye6225
 sudo chown -R csye6225:csye6225 /home/csye6225
@@ -26,7 +25,7 @@ sudo unzip webapp.zip
 cd webapp
 
 sudo ls -ltrah
-
+mv /tmp/.env /home/csye6225/webapp/webapp
 sudo npm ci
 sudo npm install --save
 
