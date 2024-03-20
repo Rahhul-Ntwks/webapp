@@ -66,5 +66,6 @@ build {
   }
   provisioner "shell" {
     script = "install_ops_agent.sh"
+  }
 }
 
