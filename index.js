@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const {testConnection,sequelize} = require('./config/dbconfig');
 const userRouter  = require('./routes/userRoutes')
+const logger = require('./logger')
 
 //const checkJsonHeader = require('./utils/checkJsonHeader')
 
@@ -31,7 +32,7 @@ app.all('*',(req,res)=> {
 })
 
 const server = app.listen(3000, () => {
-  console.log(`Server listening on port 3000`)
+  logger.info(`Server listening on port 3000`)
 });
 
 module.exports = server;

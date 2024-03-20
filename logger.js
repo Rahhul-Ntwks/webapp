@@ -1,4 +1,5 @@
 const winston = require('winston');
+
 const customLevels = {
   levels: {
     error: 0,
@@ -21,19 +22,30 @@ const logger = winston.createLogger({
   levels: customLevels.levels,
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
+    winston.format.printf(info => {
+      const { timestamp, level, message, ...args } = info;
+      const logObject = {
+        timestamp,
+        severity: level.toUpperCase(),
+        message: message,
+        ...args // Include additional properties
+      };
+      return JSON.stringify(logObject); // Return the log object as JSON string
+    })
   ),
   transports: [
-    new winston.transports.File({ filename: 'logfile.log' }) // Log to a file named logfile.log
+    new winston.transports.File({ filename: 'logfile.log' })
   ]
 });
 
-logger.error('This is an error message.');
-logger.warn('This is a warning message.');
-logger.info('This is an informational message.');
-logger.debug('This is a debug message.');
-
+// Set the logger level to debug
 logger.level = 'debug';
 
-logger.debug('This is another debug message.');
+// Log a message with an object
+const exampleObject = {
+  key1: 'value1',
+  key2: 'value2'
+};
+logger.debug('Logging an object:', exampleObject);
+
 module.exports = logger;
