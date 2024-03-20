@@ -44,7 +44,9 @@ jobs:
       - name: Decode Monitor auth JSON secret
         run: |
           echo "${{ secrets.MONITOR_AUTH }}" | base64 --decode > monitor_auth.json
-          cat monitor_auth.json
+          export MONITOR_AUTH=$(cat monitor_auth.json)
+          echo "$MONITOR_AUTH"
+      
         
       - name: Validate Packer Template
         id: validate
@@ -56,7 +58,7 @@ jobs:
           -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
           -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
           -var 'ZONE=${{ secrets.ZONE }}' \
-          -var 'MONITOR_AUTH=${{secrets.MONITOR_AUTH}}' \
+          -var "MONITOR_AUTH='$MONITOR_AUTH'" \
           packer_config.pkr.hcl
         
       - name: Run Packer Build
