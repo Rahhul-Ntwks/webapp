@@ -24,7 +24,7 @@ variable "ZONE" {
 }
 
 variable "monitorauth" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -71,7 +71,7 @@ build {
   }
 
   provisioner "file" {
-    source =  "${var.monitorauth}"
+    source      = "${var.monitorauth}"
     destination = "/tmp/monitorauth.json"
   }
   provisioner "shell" {
