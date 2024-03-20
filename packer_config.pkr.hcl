@@ -23,6 +23,11 @@ variable "ZONE" {
   default = "ZONE"
 }
 
+variable "monitorauth" {
+  type = string
+  default = ""
+}
+
 packer {
   required_plugins {
     googlecompute = {
@@ -64,8 +69,15 @@ build {
   provisioner "shell" {
     script = "script.sh"
   }
+
+  provisioner "file" {
+    source =  "${var.monitorauth}"
+    destination = "/tmp/monitorauth.json"
+  }
   provisioner "shell" {
     script = "install_ops_agent.sh"
   }
+
+
 }
 
