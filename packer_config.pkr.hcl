@@ -23,10 +23,6 @@ variable "ZONE" {
   default = "ZONE"
 }
 
-variable "MONITOR_AUTH" {
-  type    = string
-  default = "{}"
-}
 
 packer {
   required_plugins {
@@ -68,12 +64,6 @@ build {
   }
   provisioner "shell" {
     script = "script.sh"
-  }
-
-  provisioner "shell" {
-    inline = [
-      "echo '${var.MONITOR_AUTH}' > /tmp/monitorauth.json"
-    ]
   }
   provisioner "shell" {
     script = "install_ops_agent.sh"

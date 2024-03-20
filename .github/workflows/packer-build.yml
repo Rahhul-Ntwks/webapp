@@ -58,7 +58,6 @@ jobs:
           -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
           -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
           -var 'ZONE=${{ secrets.ZONE }}' \
-          -var "MONITOR_AUTH='$MONITOR_AUTH'" \
           packer_config.pkr.hcl
         
       - name: Run Packer Build
@@ -70,7 +69,6 @@ jobs:
           -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
           -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
           -var 'ZONE=${{ secrets.ZONE }}' \
-          -var "MONITOR_AUTH='$MONITOR_AUTH'" \
           -force \
           packer_config.pkr.hcl
   
