@@ -23,6 +23,7 @@ variable "ZONE" {
   default = "ZONE"
 }
 
+
 packer {
   required_plugins {
     googlecompute = {
@@ -67,5 +68,7 @@ build {
   provisioner "shell" {
     script = "install_ops_agent.sh"
   }
+
+
 }
 

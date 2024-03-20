@@ -6,7 +6,7 @@ const logger = require('../logger')
 
 async function createUser(req,res){
     try{
-        logger.info('Received createUser request', { request: req.body });
+        logger.info('Received createUser request ',(req.body))
         const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
             logger.error('Invalid accept header received');
@@ -17,13 +17,16 @@ async function createUser(req,res){
         const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
         const allowedFields = Object.keys(req.body).filter(field => authorisedfields.includes(field))
         if(UnallowedFields.length > 0 ||allowedFields.length != authorisedfields.length){
+            logger.error('wrong fields inputed',UnallowedFields)
            return res.status(400).json({error : 'wrong input fields, cant update'})
         }
         if(!password || !username || !first_name || !last_name){
+            logger.error('user details are wrong')
             return res.status(400).json();
         }
         const existUser = await User.findOne({where : {username}});
         if(existUser){
+            logger.error('user already exists',req.body)
             return res.status(400).json({error : 'user already exists'})
         }
         const passwordHash = await bcrypt.hash(password,10)
@@ -35,6 +38,7 @@ async function createUser(req,res){
         })
         const userJson = user.toJSON();
         delete userJson.password;
+        logger.info('user created successfully',userJson)
         return res.status(201).json(userJson)
 
     } catch(error){
@@ -45,19 +49,22 @@ async function createUser(req,res){
 }
 async function updateUser(req,res){
     try{
-        logger.info('Received updateUser request', { request: req.body });
+        logger.info('Received updateUser request', req.body);
         const authorizationHeader = req.headers['authorization'];
         const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
+            logger.error('only JSON responses are accepted')
             return res.status(406).send('Only JSON responses are accepted.');
         }
         const validatedUser = await validateUser(authorizationHeader)
         if(!(await validatedUser).success){
+            logger.error('user unauthorized',validatedUser)
             return res.status(401).json({error : 'user unauthorized'})
         }
         const authorisedfields= ['first_name', 'last_name', 'password']
         const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
         if(UnallowedFields.length > 0){
+            logger.error('user unauthorized',UnallowedFields)
            return res.status(400).json({error : 'wrong input fields, cant update'})
         }
         var updatedData = {...req.body}
@@ -85,6 +92,7 @@ async function updateUser(req,res){
         const user = await User.findOne({ where: { username: validatedUser.username } });
         const updatedDataJson = user.toJSON();
         delete updatedDataJson.password
+        logger.info('user info updated succesfully',updatedDataJson)
         return res.status(204).json()
 
     }catch(error) {
@@ -100,6 +108,7 @@ async function getUser(req,res){
 
      const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
+            logger.error('only JSON responses are accepted')
             return res.status(406).send('Only JSON responses are accepted.');
         }
      if((parseInt(req.headers['content-length']) > 0) || Object.keys(req.body).length>0 || (Object.keys(req.query).length > 0)){
@@ -107,11 +116,13 @@ async function getUser(req,res){
       }
         const validatedUser = await validateUser(authorizationHeader)
         if(!(await validatedUser).success){
+            logger.error('user unauthorized',validatedUser)
             res.status(401).json({error : 'user unauthorized'})
         }
         const userData = await User.findOne({ where: { username: validatedUser.username } });
         const userDataJson = userData.toJSON()
         delete userDataJson.password
+        logger.info("got the user info",userDataJson)
         res.status(200).json(userDataJson)
     }
     catch(error){

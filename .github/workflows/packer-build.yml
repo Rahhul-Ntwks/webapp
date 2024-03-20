@@ -40,6 +40,7 @@ jobs:
       - name: Format Packer Template
         id: fmt
         run: packer fmt .
+    
         
       - name: Validate Packer Template
         id: validate

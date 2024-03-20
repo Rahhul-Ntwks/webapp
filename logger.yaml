@@ -3,15 +3,20 @@ logging:
     my-app-receiver:
       type: files
       include_paths:
-        - /var/log/webapp/logfile.log
+        - /home/csye6225/webapp/logfile.log
       record_log_file_path: true
   processors:
     my-app-processor:
       type: parse_json
       time_key: time
       time_format: "%Y-%m-%dT%H:%M:%S.%L%Z"
+    severity-processor:
+      type: modify_fields
+      fields:
+        severity:
+          move_from: jsonPayload.level
   service:
     pipelines:
       default_pipeline:
         receivers: [my-app-receiver]
-        processors: [my-app-processor]
+        processors: [my-app-processor,severity-processor]
