@@ -2,11 +2,14 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const validateUser = require('../utils/validateUser');
 const { DataTypes} = require('sequelize');
+const logger = require('../logger')
 
 async function createUser(req,res){
     try{
+        logger.info('Received createUser request', { request: req.body });
         const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
+            logger.error('Invalid accept header received');
             return res.status(406).send('Only JSON responses are accepted.');
         }
         const { first_name, last_name, username, password } = req.body;
@@ -35,12 +38,14 @@ async function createUser(req,res){
         return res.status(201).json(userJson)
 
     } catch(error){
+        logger.error('Error occurred while creating user', { error: error.message });
         res.status(400).json({ error: error.message });
 
     }
 }
 async function updateUser(req,res){
     try{
+        logger.info('Received updateUser request', { request: req.body });
         const authorizationHeader = req.headers['authorization'];
         const acceptHeader = req.get('Accept');
         if (acceptHeader && !acceptHeader.includes('application/json')) {
@@ -83,12 +88,14 @@ async function updateUser(req,res){
         return res.status(204).json()
 
     }catch(error) {
+        logger.error('Error occurred while updating user', { error: error.message });
         res.status(400).json({ error: 'Forbidden' });
     }
 
 }
 async function getUser(req,res){
     try{
+        logger.info('Received getUser request');
      const authorizationHeader = req.headers['authorization'];
 
      const acceptHeader = req.get('Accept');
@@ -108,6 +115,7 @@ async function getUser(req,res){
         res.status(200).json(userDataJson)
     }
     catch(error){
+        logger.error('Error occurred while fetching user', { error: error.message });
         res.status(400).json()
 
     }
