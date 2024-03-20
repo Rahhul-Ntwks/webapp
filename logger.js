@@ -14,14 +14,10 @@ const logger = winston.createLogger({
   ]
 });
 
-// Set the logger level to debug
-logger.level = 'debug';
+logger.error('This is an error message');
+logger.warn('This is a warning message');
+logger.info('This is an info message');
+logger.debug('This is a debug message');
 
-// Log a message with an object
-const exampleObject = {
-  key1: 'value1',
-  key2: 'value2'
-};
-logger.debug('Logging an object:', exampleObject);
 
 module.exports = logger;
