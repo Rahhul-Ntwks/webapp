@@ -170,7 +170,7 @@ async function verifyUser(req, res) {
         };
         const updatedData1 = await User.update(timeupdates, {
             where: {
-                email_token: req.token
+                email_token: req.params.token
             }
         });
         logger.info('User data updated successfully.');
