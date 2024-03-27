@@ -44,6 +44,10 @@ async function createUser(req,res){
         publishVerificationMessage(username,email_token,first_name,last_name)
         const userJson = user.toJSON();
         delete userJson.password;
+        delete userJson.account_verified
+        delete userJson.email_verified_time
+        delete userJson.email_token
+        delete userJson.email_sent_time
 
         logger.info('user created successfully',userJson)
         return res.status(201).json(userJson)
@@ -142,6 +146,10 @@ async function getUser(req,res){
         const userData = await User.findOne({ where: { username: validatedUser.username } });
         const userDataJson = userData.toJSON()
         delete userDataJson.password
+        delete userJson.account_verified
+        delete userJson.email_verified_time
+        delete userJson.email_token
+        delete userJson.email_sent_time
         logger.info("got the user info",userDataJson)
         res.status(200).json(userDataJson)
     }
