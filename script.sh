@@ -4,9 +4,8 @@ sudo dnf remove nsolid nodejs -y
 sudo dnf clean all
 
 sudo dnf install -y gcc-c++ make 
-curl -sL https://rpm.nodesource.com/setup_16.x | sudo -E bash - 
-sudo dnf install nodejs npm --allowerasing -y
-
+curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -
+sudo dnf install -y nodejs
 node -v
 npm -v
 
