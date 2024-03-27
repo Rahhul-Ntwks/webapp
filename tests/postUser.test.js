@@ -4,6 +4,7 @@ const generateBasicAuthHeader = require("../utils/Hashgenerator");
 const {testConnection,sequelize} = require('../config/dbconfig');
 const User = require('../models/user');
 
+
 describe("User Endpoint Integration Tests", () => {
   const randomNumber = Math.floor(Math.random() * 10000);
   const user = {
@@ -47,7 +48,6 @@ describe("User Endpoint Integration Tests", () => {
   });
 
   it("GET user detail in POST", async () => {
-    debugger;
     const response = await request(server)
       .get(`/v1/user/self`)
       .set("Authorization", hash);
@@ -63,17 +63,15 @@ describe("User Endpoint Integration Tests", () => {
   });
 
   it("PUT user", async () => {
-    const updateuse = {...putUser,integrationtest : true}
     const response = await request(server)
       .put("/v1/user/self")
       .set("Authorization", hash)
-      .send(updateuse);
+      .send(putUser);
     tableId = response.body.id;
     expect(response.statusCode).toEqual(204);
   });
 
   it("GET user after PUT", async () => {
-    debugger;
     const response = await request(server)
       .get(`/v1/user/self`)
       .set("Authorization", updateHash);
