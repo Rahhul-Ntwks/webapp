@@ -63,7 +63,12 @@ describe("User Endpoint Integration Tests", () => {
   });
 
   it("PUT user", async () => {
-    debugger;
+    const initialresponse = await request(server)
+      .get(`/v1/user/self`)
+      .set("Authorization", hash);
+    const token = initialresponse.body.email_token
+    const resp = await request(server)
+                  .get(`/v1/verify/${token}`)
     const response = await request(server)
       .put("/v1/user/self")
       .set("Authorization", hash)
