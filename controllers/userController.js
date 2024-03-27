@@ -69,15 +69,15 @@ async function updateUser(req, res) {
             return res.status(406).send('Only JSON responses are accepted.');
         }
 
+        
+
+        const validatedUser = await validateUser(authorizationHeader);
         if (process.env.NODE_ENV != "test") {
-            const existUser = await User.findOne({ where: { username } });
-            if (!existUser.account_verified) {
+            const existUser = await User.findOne({ where: { username: validatedUser.username } });
+            if (!existUser?.account_verified) {
                 return res.status(400).send("user update failed because of authentication");
             }
         }
-
-        const validatedUser = await validateUser(authorizationHeader);
-
         if (!(await validatedUser).success) {
             logger.error('user unauthorized for username', validatedUser);
             return res.status(401).json({ error: 'user unauthorized user unauthorized for username' });
