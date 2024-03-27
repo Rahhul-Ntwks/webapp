@@ -63,16 +63,11 @@ describe("User Endpoint Integration Tests", () => {
   });
 
   it("PUT user", async () => {
-    const initialresponse = await request(server)
-      .get(`/v1/user/self`)
-      .set("Authorization", hash);
-    const token = initialresponse.body.email_token
-    const resp = await request(server)
-                  .get(`/v1/verify/${token}`)
+    const updateuse = {...putUser,integrationtest : true}
     const response = await request(server)
       .put("/v1/user/self")
       .set("Authorization", hash)
-      .send(putUser);
+      .send(updateuse);
     tableId = response.body.id;
     expect(response.statusCode).toEqual(204);
   });
