@@ -145,7 +145,7 @@ async function getUser(req,res){
             res.status(401).json({error : 'user unauthorized'})
         }
         const userData = await User.findOne({ where: { username: validatedUser.username } });
-        if (process.env.NODE_ENV != "test") {
+        if (process.env.NODE_ENV != "test" && !userData.account_verified) {
             return res.status(400).send("user fetch failed because of authentication email not verified");
         }
         const userDataJson = userData.toJSON()
