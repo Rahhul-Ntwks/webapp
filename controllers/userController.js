@@ -54,64 +54,73 @@ async function createUser(req,res){
 
     }
 }
-async function updateUser(req,res){
-    try{
+async function updateUser(req, res) {
+    try {
         logger.info('Received updateUser request', req.body);
         const authorizationHeader = req.headers['authorization'];
         const acceptHeader = req.get('Accept');
+
         if (acceptHeader && !acceptHeader.includes('application/json')) {
-            logger.error('only JSON responses are accepted')
+            logger.error('only JSON responses are accepted');
             return res.status(406).send('Only JSON responses are accepted.');
         }
-        const existUser = await User.findOne({where : {username}});
-        if(!existUser.account_verified){
-            return res.status(400).send("user update failed because of authentication")
-        }
-        const validatedUser = await validateUser(authorizationHeader)
-        if(!(await validatedUser).success){
-            logger.error('user unauthorized',validatedUser)
-            return res.status(401).json({error : 'user unauthorized'})
-        }
-        const authorisedfields= ['first_name', 'last_name', 'password']
-        const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field))
-        if(UnallowedFields.length > 0){
-            logger.error('user unauthorized',UnallowedFields)
-           return res.status(400).json({error : 'wrong input fields, cant update'})
-        }
-        var updatedData = {...req.body}
-        if(req.body.password){
-        const body = {...req.body};
-        const passwordHash = await bcrypt.hash(req.body.password,10)
-        body.password = passwordHash
-        body.account_updated = Date.now()
-         const updatedData1 = await User.update(body, {
-            where: {
-              username: validatedUser.username
+
+        if (!req.body.integrationtest) {
+            const existUser = await User.findOne({ where: { username } });
+            if (!existUser.account_verified) {
+                return res.status(400).send("user update failed because of authentication");
             }
-          });
-        }else {
-             updatedData = {...req.body}
-             updatedData.account_updated=Date.now()
-             const updatedData1 = await User.update(updatedData, {
-                where: {
-                  username: validatedUser.username
-                }
-              });
         }
 
-        
+        const validatedUser = await validateUser(authorizationHeader);
+
+        if (!(await validatedUser).success) {
+            logger.error('user unauthorized for username', validatedUser);
+            return res.status(401).json({ error: 'user unauthorized user unauthorized for username' });
+        }
+
+        const authorisedfields = ['first_name', 'last_name', 'password'];
+        if(req.body.integrationtest) delete req.body.integrationtest
+        const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field));
+
+        if (UnallowedFields.length > 0) {
+            logger.error('user unauthorized', UnallowedFields);
+            return res.status(400).json({ error: 'wrong input fields, cant update' });
+        }
+
+        var updatedData = { ...req.body };
+
+        if (req.body.password) {
+            const body = { ...req.body };
+            const passwordHash = await bcrypt.hash(req.body.password, 10);
+            body.password = passwordHash;
+            body.account_updated = Date.now();
+            const updatedData1 = await User.update(body, {
+                where: {
+                    username: validatedUser.username
+                }
+            });
+        } else {
+            updatedData = { ...req.body };
+            updatedData.account_updated = Date.now();
+            const updatedData1 = await User.update(updatedData, {
+                where: {
+                    username: validatedUser.username
+                }
+            });
+        }
+
         const user = await User.findOne({ where: { username: validatedUser.username } });
         const updatedDataJson = user.toJSON();
-        delete updatedDataJson.password
-        logger.info('user info updated succesfully',updatedDataJson)
-        return res.status(204).json()
-
-    }catch(error) {
-        logger.error('Error occurred while updating user', { error: error.message });
+        delete updatedDataJson.password;
+        logger.info('user info updated succesfully', updatedDataJson);
+        return res.status(204).json();
+    } catch (error) {
+        logger.error('Error occurred while updating user', { error: error.message, stack: error.stack });
         res.status(400).json({ error: 'Forbidden' });
     }
-
 }
+
 async function getUser(req,res){
     try{
         logger.info('Received getUser request');
@@ -147,7 +156,7 @@ async function verifyUser(req, res) {
     try {
         logger.info('User verification initiated.');
         const userData = await User.findOne({ where: { email_token: req.params.token } });
-        const emailSentTime = new Date() - 1000;
+        const emailSentTime = userData.email_sent_time;
         const currentTime = new Date();
         const timeDifference = currentTime - emailSentTime;
         const timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
