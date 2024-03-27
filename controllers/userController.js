@@ -146,10 +146,10 @@ async function getUser(req,res){
         const userData = await User.findOne({ where: { username: validatedUser.username } });
         const userDataJson = userData.toJSON()
         delete userDataJson.password
-        delete userJson.account_verified
-        delete userJson.email_verified_time
-        delete userJson.email_token
-        delete userJson.email_sent_time
+        delete userDataJson.account_verified
+        delete userDataJson.email_verified_time
+        delete userDataJson.email_token
+        delete userDataJson.email_sent_time
         logger.info("got the user info",userDataJson)
         res.status(200).json(userDataJson)
     }
