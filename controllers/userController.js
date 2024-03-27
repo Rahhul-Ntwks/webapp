@@ -138,12 +138,17 @@ async function getUser(req,res){
      if((parseInt(req.headers['content-length']) > 0) || Object.keys(req.body).length>0 || (Object.keys(req.query).length > 0)){
         return res.status(400).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
       }
+      
         const validatedUser = await validateUser(authorizationHeader)
+            
         if(!(await validatedUser).success){
             logger.error('user unauthorized',validatedUser)
             res.status(401).json({error : 'user unauthorized'})
         }
         const userData = await User.findOne({ where: { username: validatedUser.username } });
+        if (!userData.account_verified) {
+            return res.status(400).send("user fetch failed because of authentication email not verified");
+        }
         const userDataJson = userData.toJSON()
         delete userDataJson.password
         delete userDataJson.account_verified
