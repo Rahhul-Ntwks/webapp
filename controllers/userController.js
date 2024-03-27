@@ -63,6 +63,10 @@ async function updateUser(req,res){
             logger.error('only JSON responses are accepted')
             return res.status(406).send('Only JSON responses are accepted.');
         }
+        const existUser = await User.findOne({where : {username}});
+        if(!existUser.account_verified){
+            return res.status(400).send("user update failed because of authentication")
+        }
         const validatedUser = await validateUser(authorizationHeader)
         if(!(await validatedUser).success){
             logger.error('user unauthorized',validatedUser)
@@ -139,33 +143,44 @@ async function getUser(req,res){
     }
 
 }
-async function verifyUser(req,res){
-    const userData = await User.findOne({ where: { email_token: req.params.token } });
-    const emailSentTime = userData.email_sent_time
-    const currentTime = new Date();
-    const timeDifference = currentTime - emailSentTime;
-    const timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
-    let account_verified = null
-    let email_verified_time = null
-    if (timeDifferenceInSeconds > 120) {
-        account_verified = false
-        logger.error('user authentication failed.it crossed 120 seconds')
-    } else {
-        account_verified = true
-        email_verified_time = currentTime
-    logger.info('user authentication successful, user registered')
-    }
-    let timeupdates = {
-        verified : account_verified,
-        verified_time : email_verified_time
-    }
-    const updatedData1 = await User.update(timeupdates, {
-        where: {
-            token: req.token
+async function verifyUser(req, res) {
+    try {
+        logger.info('User verification initiated.');
+        const userData = await User.findOne({ where: { email_token: req.params.token } });
+        const emailSentTime = new Date() - 1000;
+        const currentTime = new Date();
+        const timeDifference = currentTime - emailSentTime;
+        const timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
+        logger.info(`Email sent time: ${emailSentTime}, Current time: ${currentTime}`);
+        logger.info(`Time difference: ${timeDifferenceInSeconds} seconds`);
+        let account_verified = null;
+        let email_verified_time = null;
+        if (timeDifferenceInSeconds > 120) {
+            account_verified = false;
+            logger.error('User authentication failed. It took longer than 120 seconds.');
+        } else {
+            account_verified = true;
+            email_verified_time = currentTime;
+            logger.info('User authentication successful. User registered.');
         }
-    });
-    res.status(200).json()
+
+        let timeupdates = {
+            verified: account_verified,
+            verified_time: email_verified_time
+        };
+        const updatedData1 = await User.update(timeupdates, {
+            where: {
+                email_token: req.token
+            }
+        });
+        logger.info('User data updated successfully.');
+        res.status(200).json();
+    } catch (error) {
+        logger.error('Error occurred during user verification:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
+
 
 
 module.exports = {
