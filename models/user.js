@@ -39,12 +39,32 @@ const User = sequelize.define('User', {
     type : DataTypes.DATE,
     defaultValue : DataTypes.NOW,
     allowNull : false,
-  }
+  },
+  email_sent_time :{
+    type : DataTypes.DATE,
+    defaultValue : null,
+    allowNull : true
+  },
+  account_verified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  email_verified_time: {
+    type : DataTypes.DATE,
+    defaultValue : null,
+    allowNull : true
+  },
+  email_token : {
+    type : DataTypes.UUID,
+    defaultValue : null,
+    allowNull : true,
+    readOnly : true
+  },
 }, {
     timestamps: false
 
 });
-User.sync()
+User.sync({ force: true })
   .then(() => {
   })
   .catch(error => {

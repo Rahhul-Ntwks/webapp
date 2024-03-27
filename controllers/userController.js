@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const validateUser = require('../utils/validateUser');
 const { DataTypes} = require('sequelize');
 const logger = require('../logger')
+const publishVerificationMessage = require('../pubsub')
+const { v4: uuidv4 } = require('uuid');
 
 async function createUser(req,res){
     try{
@@ -30,14 +32,19 @@ async function createUser(req,res){
             return res.status(400).json({error : 'user already exists'})
         }
         const passwordHash = await bcrypt.hash(password,10)
+        const email_token = uuidv4();
         const user = await User.create({
             first_name : first_name,
             last_name :last_name,
             username : username,
-            password : passwordHash
+            password : passwordHash,
+            email_token : email_token
         })
+
+        publishVerificationMessage(username,email_token,first_name,last_name)
         const userJson = user.toJSON();
         delete userJson.password;
+
         logger.info('user created successfully',userJson)
         return res.status(201).json(userJson)
 
@@ -132,9 +139,38 @@ async function getUser(req,res){
     }
 
 }
+async function verifyUser(req,res){
+    const userData = await User.findOne({ where: { email_token: req.params.token } });
+    const emailSentTime = userData.email_sent_time
+    const currentTime = new Date();
+    const timeDifference = currentTime - emailSentTime;
+    const timeDifferenceInSeconds = Math.floor(timeDifference / 1000);
+    let account_verified = null
+    let email_verified_time = null
+    if (timeDifferenceInSeconds > 120) {
+        account_verified = false
+        logger.error('user authentication failed.it crossed 120 seconds')
+    } else {
+        account_verified = true
+        email_verified_time = currentTime
+    logger.info('user authentication successful, user registered')
+    }
+    let timeupdates = {
+        verified : account_verified,
+        verified_time : email_verified_time
+    }
+    const updatedData1 = await User.update(timeupdates, {
+        where: {
+            token: req.token
+        }
+    });
+    res.status(200).json()
+}
+
 
 module.exports = {
     createUser,
     updateUser,
-    getUser
+    getUser,
+    verifyUser
 }
