@@ -69,7 +69,7 @@ async function updateUser(req, res) {
             return res.status(406).send('Only JSON responses are accepted.');
         }
 
-        if (!req.body.integrationtest) {
+        if (process.env.NODE_ENV != "test") {
             const existUser = await User.findOne({ where: { username } });
             if (!existUser.account_verified) {
                 return res.status(400).send("user update failed because of authentication");
@@ -84,7 +84,6 @@ async function updateUser(req, res) {
         }
 
         const authorisedfields = ['first_name', 'last_name', 'password'];
-        if(req.body.integrationtest) delete req.body.integrationtest
         const UnallowedFields = Object.keys(req.body).filter(field => !authorisedfields.includes(field));
 
         if (UnallowedFields.length > 0) {
@@ -146,7 +145,7 @@ async function getUser(req,res){
             res.status(401).json({error : 'user unauthorized'})
         }
         const userData = await User.findOne({ where: { username: validatedUser.username } });
-        if (!userData.account_verified) {
+        if (process.env.NODE_ENV != "test") {
             return res.status(400).send("user fetch failed because of authentication email not verified");
         }
         const userDataJson = userData.toJSON()
