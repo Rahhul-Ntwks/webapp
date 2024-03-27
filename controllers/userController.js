@@ -183,7 +183,7 @@ async function verifyUser(req, res) {
 
         let timeupdates = {
             account_verified: account_verified,
-            verified_time: email_verified_time
+            email_verified_time: email_verified_time
         };
         const updatedData1 = await User.update(timeupdates, {
             where: {
