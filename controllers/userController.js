@@ -146,7 +146,7 @@ async function getUser(req,res){
         }
         const userData = await User.findOne({ where: { username: validatedUser.username } });
         if (process.env.NODE_ENV != "test" && !userData.account_verified) {
-            return res.status(400).send("user fetch failed because of authentication email not verified");
+            return res.status(403).send("user fetch failed because of authentication email not verified");
         }
         const userDataJson = userData.toJSON()
         delete userDataJson.password
