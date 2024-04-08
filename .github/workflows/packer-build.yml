@@ -78,10 +78,11 @@ jobs:
 
       - name: Create GCP VM Template
         run: |
-            gcloud compute images create webapp-templates \
-            --source-disk=${{env.IMAGE_URI}} \
-            --family=${{ secrets.IMAGE_FAMILY }} \
-            --description="VM Template built with Packer"
+          gcloud compute instance-templates create my-instance-template \
+          --machine-type=n1-standard-1 \
+          --network=default \
+          --image=devpacker1 \
+          --description="Instance template created from devpacker1 image"
                 
     
       - name: Start Rolling Update
