@@ -74,13 +74,12 @@ jobs:
         
       - name: Debug Image URI
         run: | 
-          echo "Image URI: ${{steps.get_source_uri.outputs.image_uri}}"
+          echo "Image URI: ${{secrets.IMAGE_URI}}"
 
       - name: Create GCP VM Template
         run: |
             gcloud compute images create webapp-templates \
-            --source-uri=${{ steps.get_source_uri.outputs.image_uri }} \
-            --family ${{ secrets.IMAGE_FAMILY }} \
+            --source-uri=${{ secrets.IMAGE_URI }} \
             --description "VM Template built with Packer"
                 
     
