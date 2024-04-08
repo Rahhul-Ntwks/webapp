@@ -1,6 +1,6 @@
 name: Run Packer Build on a Template File
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -54,16 +54,53 @@ jobs:
           -var 'ZONE=${{ secrets.ZONE }}' \
           packer_config.pkr.hcl
         
-      - name: Run Packer Build
+      # - name: Run Packer Build
+      #   run: |
+      #     packer build \
+      #     -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
+      #     -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
+      #     -var 'SSH_USERNAME=${{ secrets.SSH_USERNAME }}' \
+      #     -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
+      #     -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
+      #     -var 'ZONE=${{ secrets.ZONE }}' \
+      #     -force \
+      #     packer_config.pkr.hcl
+
+      - name: Create GCP VM Template
         run: |
-          packer build \
-          -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
-          -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
-          -var 'SSH_USERNAME=${{ secrets.SSH_USERNAME }}' \
-          -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
-          -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
-          -var 'ZONE=${{ secrets.ZONE }}' \
-          -force \
-          packer_config.pkr.hcl
+            gcloud compute images create webapp-templates \
+            --source-uri $(gcloud compute images describe ${{ secrets.IMAGE_NAME }} --format="value(sourceDisk)") \
+            --family ${{ secrets.IMAGE_FAMILY }} \
+            --description "VM Template built with Packer"
+            - name: Update Managed Instance Group
+            run: |
+              gcloud compute instance-groups managed set-instance-template instance-group-manager5 \
+              --template webapp-templates \
+              --zone ${{ secrets.ZONE }}
+    
+      - name: Start Rolling Update
+        run: |
+              gcloud compute instance-groups managed rolling-action start-update instance-group-manager5 \
+              --version template= webapp-templates \
+              --zone ${{ secrets.ZONE }} \
+              --async
+    
+      - name: Wait for Update Completion
+        run: |
+              while true; do
+                status=$(gcloud compute instance-groups managed describe instance-group-manager5 \
+                --zone ${{ secrets.ZONE }} \
+                --format="value(status)" 2>/dev/null)
+                if [[ $status == "REACHABLE" ]]; then
+                  echo "Managed instance group update complete."
+                  break
+                elif [[ $status == "ROLLED_BACK" ]]; then
+                  echo "Managed instance group update failed. Please check logs."
+                  exit 1
+                else
+                  echo "Waiting for managed instance group update to complete..."
+                  sleep 30
+                fi
+              done
   
 
