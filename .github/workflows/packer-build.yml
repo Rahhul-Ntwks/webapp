@@ -79,7 +79,7 @@ jobs:
       - name: Create GCP VM Template
         run: |
             gcloud compute images create webapp-templates \
-            --source-uri=${{env.IMAGE_URI}} \
+            --source-disk=${{env.IMAGE_URI}} \
             --family=${{ secrets.IMAGE_FAMILY }} \
             --description="VM Template built with Packer"
                 
