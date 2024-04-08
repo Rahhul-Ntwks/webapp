@@ -71,6 +71,10 @@ jobs:
         run: |
             image_uri=$(gcloud compute images describe devpacker1 --format="value(sourceImage)")
             echo "::set-output name=image_uri::$image_uri"
+        
+      - name: Debug Image URI
+        run: | 
+          echo "Image URI: ${{steps.get_source_uri.outputs.image_uri}}"
 
       - name: Create GCP VM Template
         run: |
