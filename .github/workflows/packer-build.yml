@@ -66,17 +66,18 @@ jobs:
       #     -force \
       #     packer_config.pkr.hcl
 
+      - name: Get Image Source URI
+        id: get_source_uri
+        run: |
+            image_uri=$(gcloud compute images describe devpacker1 --format="value(sourceDisk)")
+            echo "::set-output name=image_uri::$image_uri"
+
       - name: Create GCP VM Template
         run: |
             gcloud compute images create webapp-templates \
-            --source-uri $(gcloud compute images describe ${{ secrets.IMAGE_NAME }} --format="value(sourceDisk)") \
+            --source-uri ${{ steps.get_source_uri.outputs.image_uri }} \
             --family ${{ secrets.IMAGE_FAMILY }} \
             --description "VM Template built with Packer"
-            - name: Update Managed Instance Group
-            run: |
-              gcloud compute instance-groups managed set-instance-template instance-group-manager5 \
-              --template webapp-templates \
-              --zone ${{ secrets.ZONE }}
     
       - name: Start Rolling Update
         run: |
