@@ -79,8 +79,8 @@ jobs:
       - name: Create GCP VM Template
         run: |
             gcloud compute images create webapp-templates \
-            --source-uri=${{ env.IMAGE_URI }} \
-            --description "VM Template built with Packer"
+            --source-uri=https://www.googleapis.com/compute/v1/projects/dev-project-414806/zones/us-central1-b/disks/packer-660dc483-2801-1873-3459-fb8cefc1e051 \
+            --family=devpackerfamily \
                 
     
       - name: Start Rolling Update
