@@ -84,7 +84,7 @@ jobs:
 
       - name: Create GCP VM Template
         run: |
-          gcloud compute instance-templates my-instance-template-${{ env.TIMESTAMP }} \
+          gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
           --machine-type=n1-standard-1 \
           --network=default \
           --image=devpacker1 \
