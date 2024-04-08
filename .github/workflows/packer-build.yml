@@ -80,6 +80,7 @@ jobs:
         run: |
             gcloud compute images create webapp-templates \
             --source-disk=packer-660dc483-2801-1873-3459-fb8cefc1e051 \
+            --source-disk-zone=us-central1-b \
             --family=devpackerfamily \
                 
     
