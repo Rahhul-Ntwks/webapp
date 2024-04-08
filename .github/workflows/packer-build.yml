@@ -76,9 +76,15 @@ jobs:
         run: | 
           echo "Image URI: ${{env.IMAGE_URI}}"
 
+      - name: Set timestamp
+        id: timestamp
+        run: |
+            timestamp=$(date +%Y%m%d%H%M%S)
+            echo "TIMESTAMP=$timestamp" >> $GITHUB_ENV
+
       - name: Create GCP VM Template
         run: |
-          gcloud compute instance-templates create my-instance-template \
+          gcloud compute instance-templates my-instance-template-${{ env.TIMESTAMP }} \
           --machine-type=n1-standard-1 \
           --network=default \
           --image=devpacker1 \
@@ -88,7 +94,7 @@ jobs:
       - name: Start Rolling Update
         run: |
               gcloud compute instance-groups managed rolling-action start-update instance-group-manager5 \
-              --version template= webapp-templates \
+              --version template= my-instance-template-${{ env.TIMESTAMP }} \
               --zone ${{ secrets.ZONE }} \
               --async
     
