@@ -75,9 +75,10 @@ jobs:
       - name: Create GCP VM Template
         run: |
             gcloud compute images create webapp-templates \
-            --source-uri ${{ steps.get_source_uri.outputs.image_uri }} \
+            --source-uri=${{ steps.get_source_uri.outputs.image_uri }} \
             --family ${{ secrets.IMAGE_FAMILY }} \
             --description "VM Template built with Packer"
+                
     
       - name: Start Rolling Update
         run: |
