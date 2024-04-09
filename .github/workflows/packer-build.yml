@@ -91,7 +91,7 @@ jobs:
           --subnet=assignment-webapp \
           --description="Instance template created from devpacker1 image" \
           --region=us-east1 \
-          --firewall_target_tags=["load-balanced-backend"] \
+          --tags=load-balanced-backend \
                 
     
       - name: Start Rolling Update
