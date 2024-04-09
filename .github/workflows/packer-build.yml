@@ -134,20 +134,18 @@ jobs:
               
       - name: Wait for Update Completion
         run: |
-              while true; do
-                status=$(gcloud compute instance-groups managed describe instance-group-manager5 \
-                --zone ${{ secrets.ZONE }} \
-                --format="value(status)" 2>/dev/null)
-                if [[ $status == "REACHABLE" ]]; then
-                  echo "Managed instance group update complete."
+          - name: Wait for Recreate Instances to Complete
+          run: |
+            while true; do
+              STATUS=$(gcloud compute instance-groups managed describe instance-group-manager5 --region=us-east1 --format="value(status)")
+                if [[ "$STATUS" == *"versionTarget.isReached=true"* && "$STATUS" == *"isStable=true"* ]]; then
+                  echo "Update completed successfully."
                   break
-                elif [[ $status == "ROLLED_BACK" ]]; then
-                  echo "Managed instance group update failed. Please check logs."
-                  exit 1
                 else
-                  echo "Waiting for managed instance group update to complete..."
-                  sleep 30
+                  echo "Update in progress..."
                 fi
-              done
+              sleep 30
+            done
+                
   
 
