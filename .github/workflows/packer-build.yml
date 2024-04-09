@@ -89,7 +89,7 @@ jobs:
           --description="Instance template created from devpacker1 image" \
           --machine-type=n1-standard-1 \
           --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
-          --instance-template-region=projects/dev-project-414806/regions/us-east1 \
+          --instance-template-region=us-east1 \
           --metadata=wait_for_guest_attributes=true,startup-script="#!/bin/bash
           echo \"Setting up database configuration...\"
           cd /
