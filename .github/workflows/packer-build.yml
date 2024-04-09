@@ -84,7 +84,7 @@ jobs:
 
       - name: Create GCP VM Template
         run: |
-          gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
+          gcloud beta compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
           --machine-type=n1-standard-1 \
           --network=assignment \
           --image=devpacker1 \
@@ -92,6 +92,35 @@ jobs:
           --description="Instance template created from devpacker1 image" \
           --region=us-east1 \
           --tags=load-balanced-backend \
+          --metadata=wait_for_guest_attributes=true,startup-script="#!/bin/bash
+          echo \"Setting up database configuration...\"
+          cd /
+          touch /opt/startupdb.sh
+          
+          env_file=\"/home/csye6225/webapp/.env\"
+          touch \"$env_file\"
+          cat << EOF > \"$env_file\"
+          POSTGRES_USER=webapp
+          POSTGRES_PASSWORD=BSuF7c
+          POSTGRES_DB=my-database-assignment
+          HOST=10.255.0.2
+          EOF
+          
+          touch /tmp/.env
+          destination_env_file=\"/tmp/.env\"
+          cp \"$env_file\" \"$destination_env_file\"
+          sudo chown csye6225:csye6225 /tmp/.env
+          sudo chown csye6225:csye6225 /home/csye6225/webapp/.env
+          " \
+          --maintenance-policy=MIGRATE \
+          --provisioning-model=STANDARD \
+          --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
+          --scopes=https://www.googleapis.com/auth/cloud-platform \
+          --no-shielded-secure-boot \
+          --shielded-vtpm \
+          --shielded-integrity-monitoring \
+          --reservation-affinity=any
+        
                 
     
       - name: Start Rolling Update
