@@ -127,9 +127,10 @@ jobs:
     
       - name: Start Rolling Update
         run: |
-              gcloud compute instance-groups managed rolling-action start-update instance-group-manager5 \
-              --region=us-east1 \
-              --version template=my-instance-template-${{ env.TIMESTAMP }} \
+          gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
+          --region=us-east1 \
+          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
+        
               
       - name: Wait for Update Completion
         run: |
