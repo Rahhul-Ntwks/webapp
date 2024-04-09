@@ -84,20 +84,6 @@ jobs:
 
       - name: Create GCP VM Template
         run: |
-          touch /opt/startupdb.sh
-          sudo mkdir -p /home/csye6225/webapp
-          env_file="/home/csye6225/webapp/.env"
-          touch "$env_file"
-          cat << EOF > "$env_file"
-          POSTGRES_USER=webapp
-          POSTGRES_PASSWORD=BSuF7c
-          POSTGRES_DB=my-database-assignment
-          HOST=10.255.0.2
-          EOF
-          
-          dos2unix /opt/startupdb.sh
-          dos2unix "$env_file"
-          
           gcloud beta compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
           --project=dev-project-414806 \
           --description="Instance template created from devpacker1 image" \
@@ -106,8 +92,23 @@ jobs:
           --instance-template-region=us-east1 \
           --metadata=wait_for_guest_attributes=true,startup-script="#!/bin/bash
           echo \"Setting up database configuration...\"
-          source /home/csye6225/webapp/.env
-          /opt/startupdb.sh
+          cd /
+          touch /opt/startupdb.sh
+          
+          env_file=\"/home/csye6225/webapp/.env\"
+          touch \"$env_file\"
+          cat << EOF > \"$env_file\"
+          POSTGRES_USER=webapp
+          POSTGRES_PASSWORD=BSuF7c
+          POSTGRES_DB=my-database-assignment
+          HOST=10.255.0.2
+          EOF
+          
+          touch /tmp/.env
+          destination_env_file=\"/tmp/.env\"
+          cp \"$env_file\" \"$destination_env_file\"
+          sudo chown csye6225:csye6225 /tmp/.env
+          sudo chown csye6225:csye6225 /home/csye6225/webapp/.env
           " \
           --maintenance-policy=MIGRATE \
           --provisioning-model=STANDARD \
@@ -121,8 +122,6 @@ jobs:
           --tags=load-balanced-backend \
           --shielded-integrity-monitoring \
           --reservation-affinity=any
-      
-          
         
         
                 
