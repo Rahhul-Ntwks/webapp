@@ -88,6 +88,7 @@ jobs:
           --machine-type=n1-standard-1 \
           --network=assignment \
           --image=devpacker1 \
+          --subnet= assignment-webapp \
           --description="Instance template created from devpacker1 image"
                 
     
