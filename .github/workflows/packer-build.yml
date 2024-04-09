@@ -116,7 +116,7 @@ jobs:
           --scopes=https://www.googleapis.com/auth/cloud-platform \
           --region=us-east1 \
           --tags=load-balanced-backend \
-          --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys1/cryptoKeys/webapp_key/cryptoKeyVersions/1 \
+          --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys1/cryptoKeys/webapp_key \
           --no-shielded-secure-boot \
           --shielded-vtpm \
           --tags=load-balanced-backend \
@@ -130,7 +130,7 @@ jobs:
         run: |
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
-          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-20240409174313
+          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
       
       - name: updating MIG with health check
         run: |
