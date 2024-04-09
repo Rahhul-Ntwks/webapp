@@ -89,8 +89,8 @@ jobs:
           --network=assignment \
           --image=devpacker1 \
           --subnet=assignment-webapp \
-          --description="Instance template created from devpacker1 image"
-          --region=us-east1
+          --description="Instance template created from devpacker1 image" \
+          --region=us-east1 \
                 
     
       - name: Start Rolling Update
