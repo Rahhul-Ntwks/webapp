@@ -116,8 +116,7 @@ jobs:
           --scopes=https://www.googleapis.com/auth/cloud-platform \
           --region=us-east1 \
           --tags=load-balanced-backend \
-          --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2 \
-          --no-shielded-secure-boot \
+          --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced \
           --shielded-vtpm \
           --tags=load-balanced-backend \
           --shielded-integrity-monitoring \
