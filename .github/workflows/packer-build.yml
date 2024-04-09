@@ -129,7 +129,9 @@ jobs:
         run: |
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
-          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
+          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }} \
+          --update-autoscaling-policy="health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check,initial-delay=30s"
+          
         
               
       - name: Wait for Update Completion
