@@ -86,7 +86,7 @@ jobs:
         run: |
           gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
           --machine-type=n1-standard-1 \
-          --network=default \
+          --network=assignment \
           --image=devpacker1 \
           --description="Instance template created from devpacker1 image"
                 
