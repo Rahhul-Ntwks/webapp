@@ -129,7 +129,7 @@ jobs:
         run: |
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
-          --version=template=projects/***/regions/us-east1/instanceTemplates/my-instance-template-20240409174313
+          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-20240409174313
           
           gcloud compute instance-groups managed set-autoscaling instance-group-manager5 \
           --region=us-east1 \
