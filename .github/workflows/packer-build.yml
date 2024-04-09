@@ -85,7 +85,7 @@ jobs:
       - name: Create GCP VM Template
         run: |
           touch /opt/startupdb.sh
-          
+          mkdir -p /home/csye6225/webapp
           env_file="/home/csye6225/webapp/.env"
           touch "$env_file"
           cat << EOF > "$env_file"
