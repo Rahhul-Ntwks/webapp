@@ -133,14 +133,13 @@ jobs:
       
       - name: updating MIG with health check
         run: |
-          gcloud compute instance-groups managed set-autoscaling instance-group-manager5 \
+          gcloud compute instance-groups managed update instance-group-manager5 \
+          --health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check \
+          --initial-delay=30s \
           --region=us-east1 \
-          --update-autoscaling-policy="health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check,initial-delay=30s"
-
         
           
         
-              
       - name: Wait for Update Completion
         run: |
           - name: Wait for Recreate Instances to Complete
