@@ -130,7 +130,6 @@ jobs:
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
           --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-20240409174313
-          --health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check,initial-delay=30s
       
       - name: updating MIG with health check
         run: |
