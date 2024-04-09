@@ -84,14 +84,12 @@ jobs:
 
       - name: Create GCP VM Template
         run: |
-          gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
-          --machine-type=n1-standard-1 \
-          --network=assignment \
-          --image=devpacker1 \
-          --subnet=assignment-webapp \
+          gcloud beta compute instance-templates create my-instance-template-20240409-170316 \
+          --project=dev-project-414806 \
           --description="Instance template created from devpacker1 image" \
-          --region=us-east1 \
-          --tags=load-balanced-backend \
+          --machine-type=n1-standard-1 \
+          --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
+          --instance-template-region=projects/dev-project-414806/regions/us-east1 \
           --metadata=wait_for_guest_attributes=true,startup-script="#!/bin/bash
           echo \"Setting up database configuration...\"
           cd /
@@ -116,10 +114,14 @@ jobs:
           --provisioning-model=STANDARD \
           --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
           --scopes=https://www.googleapis.com/auth/cloud-platform \
+          --region=us-east1 \
+          --tags=load-balanced-backend \
+          --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced \
           --no-shielded-secure-boot \
           --shielded-vtpm \
           --shielded-integrity-monitoring \
           --reservation-affinity=any
+        
         
                 
     
