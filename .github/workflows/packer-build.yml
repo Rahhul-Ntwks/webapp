@@ -96,10 +96,10 @@ jobs:
             sudo touch /opt/startupdb.sh
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
-            POSTGRES_USER=webapp
-            POSTGRES_PASSWORD=sDY=iH
-            POSTGRES_DB=my-database-assignment
-            HOST=172.25.0.2
+            POSTGRES_USER=${{ env.POSTGRES_USER_NEW }}
+            POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD_NEW }}
+            POSTGRES_DB=${{ env.POSTGRES_DB_NEW }}
+            HOST=${{ env.POSTGRES_HOST_NEW }}
             NODE_ENV=prod
             EOF
             touch /tmp/.env
@@ -110,10 +110,10 @@ jobs:
             ' \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
-            --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
+            --service-account=${{ env.SERVICE_ACCOUNT }} \
             --scopes=https://www.googleapis.com/auth/cloud-platform \
             --region=us-east1 \
-            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys20/cryptoKeys/webapp_key20 \
+            --create-disk=${{env.CREATE_DISK}} \
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
@@ -139,7 +139,7 @@ jobs:
       - name: Wait for Recreate Instances to Complete
         run: |
           while true; do
-            if (gcloud compute instance-groups managed wait-until --stable instance-group-manager5 --region=us-east1); then
+            if (gcloud compute instance-groups managed wait-until --stable ${{env.INSTANCE_GROUP_MANAGER}} --region=us-east1); then
               echo "Update completed successfully."
               break
             else
