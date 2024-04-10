@@ -117,7 +117,7 @@ jobs:
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
-            --kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2
+            --boot-disk-kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2
             --reservation-affinity=any
           
         
