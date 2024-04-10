@@ -99,9 +99,9 @@ jobs:
           touch \"$env_file\"
           cat << EOF > \"$env_file\"
           POSTGRES_USER=webapp
-          POSTGRES_PASSWORD=BSuF7c
+          POSTGRES_PASSWORD=Jubmcn
           POSTGRES_DB=my-database-assignment
-          HOST=10.255.0.2
+          HOST=10.96.0.2
           EOF
           
           touch /tmp/.env
