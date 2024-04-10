@@ -96,10 +96,10 @@ jobs:
             sudo touch /opt/startupdb.sh
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
-            POSTGRES_USER=webapp
-            POSTGRES_PASSWORD=sDY=iH
-            POSTGRES_DB=my-database-assignment
-            HOST=172.25.0.2
+            POSTGRES_USER=${{secrets.POSTGRES_USER_NEW}}
+            POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD_NEW}}
+            POSTGRES_DB=${{secrets.POSTGRES_DB_NEW}}
+            HOST=${{secrets.POSTGRES_HOST_NEW}}
             NODE_ENV=prod
             EOF
             touch /tmp/.env
