@@ -136,21 +136,17 @@ jobs:
           --initial-delay=30s \
           --region=us-east1 \
         
-          
-        
-      - name: Wait for Update Completion
+      - name: Wait for Recreate Instances to Complete
         run: |
-          - name: Wait for Recreate Instances to Complete
-          run: |
-            while true; do
-              if (gcloud compute instance-groups managed wait-until --version-target-reached instance-group-manager5 --region=us-east1); then
-                echo "Update completed successfully."
-                  break
-              else
-                  echo "Update in progress..."
-              fi
+          while true; do
+            if (gcloud compute instance-groups managed wait-until --version-target-reached instance-group-manager5 --region=us-east1); then
+              echo "Update completed successfully."
+              break
+            else
+              echo "Update in progress..."
+            fi
             sleep 30
-            done
+          done
                 
   
 
