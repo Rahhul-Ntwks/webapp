@@ -97,9 +97,9 @@ jobs:
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
             POSTGRES_USER=webapp
-            POSTGRES_PASSWORD=Jubmcn
+            POSTGRES_PASSWORD=Yl>q)E
             POSTGRES_DB=my-database-assignment
-            HOST=10.96.0.2
+            HOST=10.218.0.2
             NODE_ENV=prod
             EOF
             touch /tmp/.env
