@@ -54,17 +54,17 @@ jobs:
           -var 'ZONE=${{ secrets.ZONE }}' \
           packer_config.pkr.hcl
         
-      # - name: Run Packer Build
-      #   run: |
-      #     packer build \
-      #     -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
-      #     -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
-      #     -var 'SSH_USERNAME=${{ secrets.SSH_USERNAME }}' \
-      #     -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
-      #     -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
-      #     -var 'ZONE=${{ secrets.ZONE }}' \
-      #     -force \
-      #     packer_config.pkr.hcl
+      - name: Run Packer Build
+        run: |
+          packer build \
+          -var 'PROJECT_ID=${{ secrets.PROJECT_ID }}' \
+          -var 'SOURCE_IMAGE_FAMILY=${{ secrets.SOURCE_IMAGE_FAMILY }}' \
+          -var 'SSH_USERNAME=${{ secrets.SSH_USERNAME }}' \
+          -var 'IMAGE_NAME=${{ secrets.IMAGE_NAME }}' \
+          -var 'IMAGE_FAMILY=${{ secrets.IMAGE_FAMILY }}' \
+          -var 'ZONE=${{ secrets.ZONE }}' \
+          -force \
+          packer_config.pkr.hcl
 
       - name: Get Image Source URI
         id: get_source_uri
