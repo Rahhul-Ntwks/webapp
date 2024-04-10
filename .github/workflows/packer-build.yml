@@ -85,7 +85,7 @@ jobs:
       - name: Create GCP VM Template
         run: |
             gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
-            --project=dev-project-414806 \
+            --project=${{ secrets.PROJECT_ID }} \
             --description="Instance template created from devpacker1 image" \
             --machine-type=n1-standard-1 \
             --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
@@ -127,19 +127,19 @@ jobs:
         run: |
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
-          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
+          --version=template=projects/${{ secrets.PROJECT_ID }}/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
       
       - name: updating MIG with health check
         run: |
-          gcloud compute instance-groups managed update instance-group-manager5 \
-          --health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check \
+          gcloud compute instance-groups managed update ${{secrets.INSTANCE_GROUP_MANAGER}} \
+          --health-check=projects/${{ secrets.PROJECT_ID }}/regions/us-east1/healthChecks/autohealing-health-check \
           --initial-delay=30s \
           --region=us-east1 \
         
       - name: Wait for Recreate Instances to Complete
         run: |
           while true; do
-            if (gcloud compute instance-groups managed wait-until --stable ${{env.INSTANCE_GROUP_MANAGER}} --region=us-east1); then
+            if (gcloud compute instance-groups managed wait-until --stable ${{secrets.INSTANCE_GROUP_MANAGER}} --region=us-east1); then
               echo "Update completed successfully."
               break
             else
