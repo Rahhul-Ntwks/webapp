@@ -95,8 +95,8 @@ jobs:
             cd /
             sudo touch /opt/startupdb.sh
               
-            env_file='/home/csye6225/webapp/.env'
-            sudo touch '$env_file'
+            env_file="/home/csye6225/webapp/.env"
+            sudo touch "$env_file"
             tee "$ENV_FILE" > /dev/null <<EOF
             POSTGRES_USER=webapp
             POSTGRES_PASSWORD=Jubmcn
@@ -105,8 +105,8 @@ jobs:
             EOF
               
             touch /tmp/.env
-            destination_env_file='/tmp/.env'
-            cp '$env_file' '$destination_env_file'
+            destination_env_file="/tmp/.env"
+            cp "$env_file" "$destination_env_file"
             sudo chown csye6225:csye6225 /tmp/.env
             sudo chown csye6225:csye6225 /home/csye6225/webapp/.env" \
             --maintenance-policy=MIGRATE \
