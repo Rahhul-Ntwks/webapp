@@ -115,7 +115,6 @@ jobs:
           --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
           --scopes=https://www.googleapis.com/auth/cloud-platform \
           --region=us-east1 \
-          --tags=load-balanced-backend \
           --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced \
           --shielded-vtpm \
           --tags=["load-balanced-backend","allow-http"] \
