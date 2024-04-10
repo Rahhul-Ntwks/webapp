@@ -85,7 +85,7 @@ jobs:
       - name: Create GCP VM Template
         run: |
             gcloud compute instance-templates create my-instance-template-${{ env.TIMESTAMP }} \
-            --project=${{ secrets.PROJECT_ID }} \
+            --project=dev-project-414806 \
             --description="Instance template created from devpacker1 image" \
             --machine-type=n1-standard-1 \
             --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
@@ -96,10 +96,10 @@ jobs:
             sudo touch /opt/startupdb.sh
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
-            POSTGRES_USER=${{ secrets.POSTGRES_USER_NEW }}
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_NEW }}
-            POSTGRES_DB=${{ secrets.POSTGRES_DB_NEW }}
-            HOST=${{ secrets.POSTGRES_HOST_NEW }}
+            POSTGRES_USER=webapp
+            POSTGRES_PASSWORD=sDY=iH
+            POSTGRES_DB=my-database-assignment
+            HOST=172.25.0.2
             NODE_ENV=prod
             EOF
             touch /tmp/.env
@@ -110,10 +110,10 @@ jobs:
             ' \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
-            --service-account=${{ secrets.SERVICE_ACCOUNT }} \
+            --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform \
             --region=us-east1 \
-            --create-disk=${{secrets.CREATE_DISK}} \
+            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys20/cryptoKeys/webapp_key20 \
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
@@ -127,19 +127,19 @@ jobs:
         run: |
           gcloud beta compute instance-groups managed rolling-action start-update instance-group-manager5 \
           --region=us-east1 \
-          --version=template=projects/${{ secrets.PROJECT_ID }}/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
+          --version=template=projects/dev-project-414806/regions/us-east1/instanceTemplates/my-instance-template-${{ env.TIMESTAMP }}
       
       - name: updating MIG with health check
         run: |
-          gcloud compute instance-groups managed update ${{secrets.INSTANCE_GROUP_MANAGER}} \
-          --health-check=projects/${{ secrets.PROJECT_ID }}/regions/us-east1/healthChecks/autohealing-health-check \
+          gcloud compute instance-groups managed update instance-group-manager5 \
+          --health-check=projects/dev-project-414806/regions/us-east1/healthChecks/autohealing-health-check \
           --initial-delay=30s \
           --region=us-east1 \
         
       - name: Wait for Recreate Instances to Complete
         run: |
           while true; do
-            if (gcloud compute instance-groups managed wait-until --stable ${{secrets.INSTANCE_GROUP_MANAGER}} --region=us-east1); then
+            if (gcloud compute instance-groups managed wait-until --stable instance-group-manager5 --region=us-east1); then
               echo "Update completed successfully."
               break
             else
