@@ -90,14 +90,14 @@ jobs:
             --machine-type=n1-standard-1 \
             --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
             --instance-template-region=us-east1 \
-            --metadata=wait_for_guest_attributes=true,startup-script="#!/bin/bash
+            --metadata=wait_for_guest_attributes=true,startup-script='#!/bin/bash
             echo 'Setting up database configuration...'
             cd /
             sudo touch /opt/startupdb.sh
               
             env_file="/home/csye6225/webapp/.env"
             sudo touch "$env_file"
-            tee "$ENV_FILE" > /dev/null <<EOF
+            tee "$env_file" > /dev/null <<EOF
             POSTGRES_USER=webapp
             POSTGRES_PASSWORD=Jubmcn
             POSTGRES_DB=my-database-assignment
@@ -108,7 +108,7 @@ jobs:
             destination_env_file="/tmp/.env"
             cp "$env_file" "$destination_env_file"
             sudo chown csye6225:csye6225 /tmp/.env
-            sudo chown csye6225:csye6225 /home/csye6225/webapp/.env" \
+            sudo chown csye6225:csye6225 /home/csye6225/webapp/.env' \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
             --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
