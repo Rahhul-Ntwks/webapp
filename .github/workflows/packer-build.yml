@@ -91,19 +91,17 @@ jobs:
             --network-interface=network-tier=PREMIUM,subnet=assignment-webapp \
             --instance-template-region=us-east1 \
             --metadata=wait_for_guest_attributes=true,startup-script='#!/bin/bash
-            echo 'Setting up database configuration...'
-            cd /
+            cd /opt
+
             sudo touch /opt/startupdb.sh
-              
-            env_file="/home/csye6225/webapp/.env"
-            sudo touch "$env_file"
-            tee "$env_file" > /dev/null <<EOF
+            ENV_FILE="/home/csye6225/webapp/.env"
+            tee "$ENV_FILE" > /dev/null <<EOF
             POSTGRES_USER=webapp
             POSTGRES_PASSWORD=Jubmcn
             POSTGRES_DB=my-database-assignment
             HOST=10.96.0.2
+            NODE_ENV=prod
             EOF
-              
             touch /tmp/.env
             destination_env_file="/tmp/.env"
             cp "$env_file" "$destination_env_file"
