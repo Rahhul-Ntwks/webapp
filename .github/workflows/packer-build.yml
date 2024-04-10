@@ -113,7 +113,7 @@ jobs:
             --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform \
             --region=us-east1 \
-            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2 \
+            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys13/cryptoKeys/webapp_key14 \
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
@@ -143,7 +143,7 @@ jobs:
           - name: Wait for Recreate Instances to Complete
           run: |
             while true; do
-              STATUS=$(gcloud compute instance-groups managed describe instance-group-manager5 --region=us-east1 --format="value(status)")
+              STATUS=$(gcloud compute instance-groups managed describe instance-group-manager5 --region=us-east1 --format="json(status)")
                 if [[ "$STATUS" == *"versionTarget.isReached=true"* && "$STATUS" == *"isStable=true"* ]]; then
                   echo "Update completed successfully."
                   break
