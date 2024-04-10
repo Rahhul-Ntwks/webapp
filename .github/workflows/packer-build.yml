@@ -113,11 +113,10 @@ jobs:
             --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/cloud-platform \
             --region=us-east1 \
-            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced \
+            --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced,kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2 \
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
-            --boot-disk-kms-key=projects/dev-project-414806/locations/us-east1/keyRings/webapp-keys3/cryptoKeys/webapp_key2
             --reservation-affinity=any
           
         
