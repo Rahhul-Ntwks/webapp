@@ -97,7 +97,7 @@ jobs:
               
             env_file='/home/csye6225/webapp/.env'
             sudo touch \"$env_file\"
-            sudo cat << EOF > \"$env_file\"
+            tee "$ENV_FILE" > /dev/null <<EOF
             POSTGRES_USER=webapp
             POSTGRES_PASSWORD=Jubmcn
             POSTGRES_DB=my-database-assignment
