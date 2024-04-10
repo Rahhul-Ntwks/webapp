@@ -108,7 +108,8 @@ jobs:
             destination_env_file="/tmp/.env"
             cp "$env_file" "$destination_env_file"
             sudo chown csye6225:csye6225 /tmp/.env
-            sudo chown csye6225:csye6225 /home/csye6225/webapp/.env' \
+            sudo chown csye6225:csye6225 /home/csye6225/webapp/.env
+            ' \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
             --service-account=monitoring-service-account@dev-project-414806.iam.gserviceaccount.com \
