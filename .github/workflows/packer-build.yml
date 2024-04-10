@@ -96,10 +96,10 @@ jobs:
             sudo touch /opt/startupdb.sh
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
-            POSTGRES_USER=${{ env.POSTGRES_USER_NEW }}
-            POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD_NEW }}
-            POSTGRES_DB=${{ env.POSTGRES_DB_NEW }}
-            HOST=${{ env.POSTGRES_HOST_NEW }}
+            POSTGRES_USER=${{ secrets.POSTGRES_USER_NEW }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD_NEW }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB_NEW }}
+            HOST=${{ secrets.POSTGRES_HOST_NEW }}
             NODE_ENV=prod
             EOF
             touch /tmp/.env
@@ -110,10 +110,10 @@ jobs:
             ' \
             --maintenance-policy=MIGRATE \
             --provisioning-model=STANDARD \
-            --service-account=${{ env.SERVICE_ACCOUNT }} \
+            --service-account=${{ secrets.SERVICE_ACCOUNT }} \
             --scopes=https://www.googleapis.com/auth/cloud-platform \
             --region=us-east1 \
-            --create-disk=${{env.CREATE_DISK}} \
+            --create-disk=${{secrets.CREATE_DISK}} \
             --shielded-vtpm \
             --tags=load-balanced-backend,allow-http \
             --shielded-integrity-monitoring \
