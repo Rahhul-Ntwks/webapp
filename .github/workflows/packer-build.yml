@@ -118,7 +118,7 @@ jobs:
           --tags=load-balanced-backend \
           --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image=projects/dev-project-414806/global/images/devpacker1,mode=rw,size=20,type=pd-balanced \
           --shielded-vtpm \
-          --tags=load-balanced-backend \
+          --tags=["load-balanced-backend","allow-http"] \
           --shielded-integrity-monitoring \
           --reservation-affinity=any
         
