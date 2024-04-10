@@ -97,9 +97,9 @@ jobs:
             ENV_FILE="/home/csye6225/webapp/.env"
             tee "$ENV_FILE" > /dev/null <<EOF
             POSTGRES_USER=webapp
-            POSTGRES_PASSWORD=Yl>q)E
+            POSTGRES_PASSWORD=sDY=iH
             POSTGRES_DB=my-database-assignment
-            HOST=10.218.0.2
+            HOST=172.25.0.2
             NODE_ENV=prod
             EOF
             touch /tmp/.env
@@ -143,14 +143,13 @@ jobs:
           - name: Wait for Recreate Instances to Complete
           run: |
             while true; do
-              STATUS=$(gcloud compute instance-groups managed describe instance-group-manager5 --region=us-east1 --format="json(status)")
-                if [[ "$STATUS" == *"versionTarget.isReached=true"* && "$STATUS" == *"isStable=true"* ]]; then
-                  echo "Update completed successfully."
+              if (gcloud compute instance-groups managed wait-until --version-target-reached instance-group-manager5 --region=us-east1); then
+                echo "Update completed successfully."
                   break
-                else
+              else
                   echo "Update in progress..."
-                fi
-              sleep 30
+              fi
+            sleep 30
             done
                 
   
