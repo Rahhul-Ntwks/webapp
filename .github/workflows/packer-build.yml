@@ -139,7 +139,7 @@ jobs:
       - name: Wait for Recreate Instances to Complete
         run: |
           while true; do
-            if (gcloud compute instance-groups managed wait-until --version-target-reached instance-group-manager5 --region=us-east1); then
+            if (gcloud compute instance-groups managed wait-until --stable instance-group-manager5 --region=us-east1); then
               echo "Update completed successfully."
               break
             else
