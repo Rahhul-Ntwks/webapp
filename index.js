@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(checkJsonHeader)
 
 
-app.use('/v1',userRouter);
+app.use('/v2',userRouter);
 app.all('/healthz',async (req,res) => {
   if(req.method != "GET"){
     return res.status(405).header('Cache-Control', 'no-cache, no-store, must-revalidate').json();
