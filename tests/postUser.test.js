@@ -35,7 +35,7 @@ describe("User Endpoint Integration Tests", () => {
 
   it("POST user", async () => {
 
-    const response = await request(server).post("/v1/user").send(user);
+    const response = await request(server).post("/v2/user").send(user);
     tableId = response.body.id;
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(
@@ -49,7 +49,7 @@ describe("User Endpoint Integration Tests", () => {
 
   it("GET user detail in POST", async () => {
     const response = await request(server)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set("Authorization", hash);
 
     expect(response.statusCode).toEqual(200);
@@ -64,7 +64,7 @@ describe("User Endpoint Integration Tests", () => {
 
   it("PUT user", async () => {
     const response = await request(server)
-      .put("/v1/user/self")
+      .put("/v2/user/self")
       .set("Authorization", hash)
       .send(putUser);
     tableId = response.body.id;
@@ -73,7 +73,7 @@ describe("User Endpoint Integration Tests", () => {
 
   it("GET user after PUT", async () => {
     const response = await request(server)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set("Authorization", updateHash);
 
     expect(response.statusCode).toEqual(200);
